@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4orth Space — Coming Soon</title>
+  <meta name="description" content="4orth Space is opening soon in Guzape, Abuja. A social impact hub — café, co-working, workshops, and community. Sign up to be first to know." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:      #5A5D36;
+      --brand-dark: #4A4A2C;
+      --tan:        #B8AA80;
+      --cream:      #F9F7F5;
+      --cream-mid:  #F2F1EC;
+      --border:     #E9E7E1;
+      --muted:      #A7A284;
+      --text:       #4A4A2C;
+      --rust:       rgb(144,81,45);
+      --font-body:    'Inter', sans-serif;
+      --font-display: 'Playfair Display', Georgia, serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    /* Background */
+    .bg { display: none; }
+
+    /* Layout */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 5%;
+      text-align: center;
+    }
+
+    /* Logo */
+    .logo {
+      margin-bottom: 64px;
+    }
+    .logo img {
+      height: 48px;
+      width: auto;
+      display: block;
+    }
+
+    /* Eyebrow */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    /* Headline */
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 400;
+      color: var(--brand-dark);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+    }
+    h1 em {
+      color: var(--rust);
+      font-style: italic;
+    }
+
+    /* Body text */
+    .intro {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 56px;
+    }
+
+    /* Notify form */
+    .notify-form {
+      display: flex;
+      gap: 0;
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto 24px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .notify-form input {
+      flex: 1;
+      background: var(--cream-mid);
+      border: none;
+      outline: none;
+      padding: 16px 20px;
+      font-size: 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+    }
+    .notify-form input::placeholder { color: var(--muted); }
+    .notify-form button {
+      background: var(--brand-dark);
+      color: #fff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .notify-form button:hover { background: var(--brand); }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 72px;
+    }
+
+    /* Success state */
+    .notify-success {
+      display: none;
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto 72px;
+      background: var(--cream-mid);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 24px;
+      font-size: 14px;
+      color: var(--brand);
+    }
+
+    /* Location strip */
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .location svg { flex-shrink: 0; }
+
+    /* Footer */
+    .footer {
+      position: relative;
+      z-index: 1;
+      padding: 24px 5%;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .footer a { color: var(--brand); text-decoration: none; }
+    .footer a:hover { color: var(--brand-dark); }
+  </style>
+</head>
+<body>
+
+  <div class="bg">
+    <div class="bg-tile" style="background-image:url('space-office.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/09-furniture.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/10-logo-up.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/14-site-visit-1.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('space-lounge.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/07-fit-out.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/15-site-visit-2.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/08-painting.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('space-meeting.jpg');"></div>
+    <div class="bg-tile" style="background-image:url('journey/16-site-visit-3.jpg');"></div>
+  </div>
+
+  <main class="page">
+
+    <div class="logo">
+      <img src="logo.png" alt="4orth Space" />
+    </div>
+
+    <p class="eyebrow">Guzape, Abuja · Opening soon</p>
+
+    <h1>
+      Something meaningful<br/>is <em>almost here.</em>
+    </h1>
+
+    <form class="notify-form" onsubmit="handleNotify(event)">
+      <input type="email" id="notify-email" placeholder="Your email address" required />
+      <button type="submit">Notify me</button>
+    </form>
+    <p class="form-note">No spam. Just a heads-up when we open.</p>
+
+    <div class="notify-success" id="notify-success">
+      ✓ &nbsp;You're on the list. We'll be in touch soon.
+    </div>
+
+    <div class="location">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      4orth HQ, Guzape, Abuja
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 4orth Space &nbsp;·&nbsp;
+    <a href="mailto:contact@4orthspace.com">contact@4orthspace.com</a>
+  </footer>
+
+  <script>
+    function handleNotify(e) {
+      e.preventDefault();
+      const email = document.getElementById('notify-email').value.trim();
+      if (!email) return;
+
+      // Store in localStorage
+      const list = JSON.parse(localStorage.getItem('4orth_notify') || '[]');
+      list.push({ email, date: new Date().toISOString() });
+      localStorage.setItem('4orth_notify', JSON.stringify(list));
+
+      // Show success
+      document.querySelector('.notify-form').style.display = 'none';
+      document.querySelector('.form-note').style.display = 'none';
+      document.getElementById('notify-success').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — 4orth Space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #5A5D36; --brand-dark: #4A4A2C; --tan: #B8AA80; --tan-dark: #A7A284;
+      --cream: #F9F7F5; --cream-mid: #F2F1EC; --border: #E9E7E1; --muted: #A7A284;
+      --text: #4A4A2C; --white: #FFFFFF;
+      --font: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font); background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* LOGIN */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: var(--brand-dark); padding: 20px;
+    }
+    .login-box {
+      background: var(--white); border-radius: 16px; padding: 48px 40px;
+      width: 100%; max-width: 400px; text-align: center;
+    }
+    .login-logo { height: 44px; margin: 0 auto 28px; display: block; }
+    .login-title { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+    .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+    .login-box input[type="password"] {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px;
+      font-family: var(--font); font-size: 15px; color: var(--text); background: var(--cream);
+      outline: none; margin-bottom: 14px; transition: border-color 0.2s;
+    }
+    .login-box input:focus { border-color: var(--brand); }
+    .login-btn {
+      width: 100%; background: var(--brand); color: var(--white); border: none;
+      padding: 13px; border-radius: 8px; font-size: 15px; font-weight: 500;
+      cursor: pointer; font-family: var(--font); transition: background 0.2s;
+    }
+    .login-btn:hover { background: var(--brand-dark); }
+    .login-error { font-size: 13px; color: #b91c1c; margin-top: 10px; display: none; }
+
+    /* ADMIN SHELL */
+    #adminShell { display: none; }
+    .admin-header {
+      background: var(--brand-dark); color: var(--white); padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .admin-header-left { display: flex; align-items: center; gap: 20px; }
+    .admin-logo { height: 34px; filter: brightness(0) invert(1); opacity: 0.9; }
+    .admin-badge { font-size: 11px; font-weight: 500; background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 100px; letter-spacing: 0.5px; }
+    .admin-logout { font-size: 13px; color: rgba(255,255,255,0.6); background: none; border: none; cursor: pointer; font-family: var(--font); transition: color 0.2s; }
+    .admin-logout:hover { color: var(--white); }
+
+    .admin-body { display: flex; min-height: calc(100vh - 60px); }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px; background: var(--white); border-right: 1px solid var(--border);
+      padding: 28px 0; flex-shrink: 0;
+    }
+    .sidebar-section { font-size: 10px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); padding: 0 20px; margin-bottom: 8px; }
+    .sidebar-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 20px; font-size: 14px; color: #5C5B37; cursor: pointer;
+      transition: background 0.15s; border: none; background: none; width: 100%; text-align: left; font-family: var(--font);
+    }
+    .sidebar-link:hover { background: var(--cream); color: var(--text); }
+    .sidebar-link.active { background: var(--cream-mid); color: var(--brand-dark); font-weight: 500; border-right: 3px solid var(--brand); }
+    .sidebar-badge { background: var(--brand); color: var(--white); font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 100px; min-width: 20px; text-align: center; }
+
+    /* MAIN */
+    .admin-main { flex: 1; padding: 32px; overflow-y: auto; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* STATS ROW */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+    .stat-num { font-size: 30px; font-weight: 500; color: var(--brand-dark); font-family: 'Playfair Display', serif; line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--muted); }
+
+    /* SECTION HEADER */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .section-title { font-size: 16px; font-weight: 500; color: var(--text); }
+    .btn-export { font-size: 12px; font-weight: 500; color: var(--brand); border: 1px solid var(--brand); background: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-family: var(--font); transition: background 0.2s; }
+    .btn-export:hover { background: var(--cream-mid); }
+
+    /* TABLE */
+    .table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: var(--cream-mid); }
+    thead th { padding: 12px 16px; text-align: left; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
+    tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:hover { background: var(--cream); }
+    td { padding: 13px 16px; vertical-align: top; color: var(--text); }
+    td.muted { color: var(--muted); font-size: 12px; }
+    .empty-state { padding: 48px; text-align: center; color: var(--muted); font-size: 14px; }
+
+    /* BADGES */
+    .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 100px; }
+    .badge-pending { background: #FEF3C7; color: #92400E; }
+    .badge-confirmed { background: #D1FAE5; color: #065F46; }
+    .badge-rejected { background: #FEE2E2; color: #991B1B; }
+    .badge-new { background: #EDE9FE; color: #5B21B6; }
+    .badge-read { background: var(--cream-mid); color: var(--muted); }
+    .badge-sig { background: var(--cream-mid); color: var(--brand-dark); }
+    .badge-res { background: #D1FAE5; color: #065F46; }
+    .badge-exec { background: var(--brand-dark); color: var(--white); }
+
+    /* ACTION BUTTONS */
+    .action-btn { font-size: 11px; font-weight: 500; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-family: var(--font); transition: opacity 0.2s; margin-right: 4px; }
+    .action-btn:hover { opacity: 0.75; }
+    .btn-confirm { background: #D1FAE5; color: #065F46; }
+    .btn-reject { background: #FEE2E2; color: #991B1B; }
+    .btn-mark-read { background: var(--cream-mid); color: var(--muted); }
+    .btn-delete { background: #FEE2E2; color: #991B1B; }
+
+    /* DETAIL DRAWER */
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; }
+    .drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; background: var(--white); box-shadow: -4px 0 24px rgba(0,0,0,0.1); z-index: 201; padding: 32px; overflow-y: auto; transform: translateX(100%); transition: transform 0.25s; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-overlay.open { display: block; }
+    .drawer-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+    .drawer-title { font-size: 18px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+    .drawer-sub { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+    .detail-row { display: flex; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 14px; }
+    .detail-row:last-of-type { border-bottom: none; }
+    .detail-key { font-size: 12px; font-weight: 500; color: var(--muted); min-width: 110px; flex-shrink: 0; }
+    .detail-val { font-size: 13px; color: var(--text); word-break: break-word; }
+    .drawer-actions { margin-top: 24px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .drawer-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font); }
+
+    /* FILTER BAR */
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border); background: var(--white); color: #5C5B37; cursor: pointer; font-family: var(--font); transition: all 0.15s; }
+    .filter-btn.active { background: var(--brand); color: var(--white); border-color: var(--brand); }
+    .search-input { padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: var(--font); color: var(--text); background: var(--white); outline: none; width: 220px; }
+    .search-input:focus { border-color: var(--brand); }
+
+    /* OVERVIEW */
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+    .qa-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: border-color 0.2s; }
+    .qa-card:hover { border-color: var(--brand); }
+    .qa-icon { font-size: 24px; margin-bottom: 10px; }
+    .qa-title { font-size: 14px; font-weight: 500; color: var(--text); }
+    .qa-desc { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .drawer { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img src="logo.png" alt="4orth Space" class="login-logo" />
+    <div class="login-title">Admin access</div>
+    <div class="login-sub">Enter the admin password to continue</div>
+    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div id="adminShell">
+  <div class="admin-header">
+    <div class="admin-header-left">
+      <img src="logo.png" alt="4orth" class="admin-logo" />
+      <span class="admin-badge">Admin panel</span>
+    </div>
+    <button class="admin-logout" onclick="logout()">Sign out</button>
+  </div>
+  <div class="admin-body">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section" style="margin-top:0;">Overview</div>
+      <button class="sidebar-link active" onclick="showPanel('overview', this)">Dashboard</button>
+      <div class="sidebar-section" style="margin-top:20px;">Manage</div>
+      <button class="sidebar-link" onclick="showPanel('members', this)">Members <span class="sidebar-badge" id="membersBadge">0</span></button>
+      <button class="sidebar-link" onclick="showPanel('bookings', this)">Bookings <span class="sidebar-badge" id="bookingsBadge">0</span></button>
+      <button class="sidebar-link" onclick="showPanel('messages', this)">Messages <span class="sidebar-badge" id="messagesBadge">0</span></button>
+      <button class="sidebar-link" onclick="showPanel('analytics', this)">Analytics</button>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- OVERVIEW -->
+      <div class="panel active" id="panel-overview">
+        <div class="stats-row" id="statsRow">
+          <div class="stat-card"><div class="stat-num" id="stat-members">0</div><div class="stat-label">Total members</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-pending">0</div><div class="stat-label">Pending approvals</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-bookings">0</div><div class="stat-label">Space bookings</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-messages">0</div><div class="stat-label">Contact messages</div></div>
+        </div>
+        <div class="quick-actions">
+          <div class="qa-card" onclick="showPanel('members', document.querySelector('[onclick*=members]'))">
+            <div class="qa-icon">👥</div>
+            <div class="qa-title">Review members</div>
+            <div class="qa-desc">Confirm or decline pending registrations</div>
+          </div>
+          <div class="qa-card" onclick="showPanel('bookings', document.querySelector('[onclick*=bookings]'))">
+            <div class="qa-icon">🗓️</div>
+            <div class="qa-title">Space bookings</div>
+            <div class="qa-desc">Manage incoming booking requests</div>
+          </div>
+          <div class="qa-card" onclick="showPanel('messages', document.querySelector('[onclick*=messages]'))">
+            <div class="qa-icon">✉️</div>
+            <div class="qa-title">Contact messages</div>
+            <div class="qa-desc">View and respond to enquiries</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Recent activity</th><th>Type</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="activityTable"><tr><td colspan="4" class="empty-state">No activity yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MEMBERS -->
+      <div class="panel" id="panel-members">
+        <div class="section-header">
+          <span class="section-title">Members</span>
+          <button class="btn-export" onclick="exportCSV('members')">Export CSV</button>
+        </div>
+        <div class="filter-bar">
+          <input type="text" class="search-input" placeholder="Search by name or email…" oninput="filterMembers(this.value)" />
+          <button class="filter-btn active" onclick="filterMemberStatus('all', this)">All</button>
+          <button class="filter-btn" onclick="filterMemberStatus('pending', this)">Pending</button>
+          <button class="filter-btn" onclick="filterMemberStatus('confirmed', this)">Confirmed</button>
+          <button class="filter-btn" onclick="filterMemberStatus('rejected', this)">Rejected</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Tier</th><th>Occupation</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="membersTable"><tr><td colspan="7" class="empty-state">No members yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BOOKINGS -->
+      <div class="panel" id="panel-bookings">
+        <div class="section-header">
+          <span class="section-title">Space bookings</span>
+          <button class="btn-export" onclick="exportCSV('bookings')">Export CSV</button>
+        </div>
+        <div class="filter-bar">
+          <input type="text" class="search-input" placeholder="Search bookings…" oninput="filterBookings(this.value)" />
+          <button class="filter-btn active" onclick="filterBookingStatus('all', this)">All</button>
+          <button class="filter-btn" onclick="filterBookingStatus('pending', this)">Pending</button>
+          <button class="filter-btn" onclick="filterBookingStatus('confirmed', this)">Confirmed</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Space</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="bookingsTable"><tr><td colspan="6" class="empty-state">No bookings yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="panel" id="panel-messages">
+        <div class="section-header">
+          <span class="section-title">Contact messages</span>
+          <button class="btn-export" onclick="exportCSV('messages')">Export CSV</button>
+        </div>
+        <div class="filter-bar">
+          <input type="text" class="search-input" placeholder="Search messages…" oninput="filterMessages(this.value)" />
+          <button class="filter-btn active" onclick="filterMessageStatus('all', this)">All</button>
+          <button class="filter-btn" onclick="filterMessageStatus('new', this)">Unread</button>
+          <button class="filter-btn" onclick="filterMessageStatus('read', this)">Read</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Subject / interest</th><th>Received</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="messagesTable"><tr><td colspan="6" class="empty-state">No messages yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="panel" id="panel-analytics">
+        <div class="section-header">
+          <span class="section-title">Website analytics</span>
+          <button class="btn-export" onclick="exportAnalyticsCSV()">Export CSV</button>
+        </div>
+
+        <!-- Summary stats -->
+        <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;" id="analyticsStats">
+          <div class="stat-card"><div class="stat-num" id="an-total">0</div><div class="stat-label">Total visits</div></div>
+          <div class="stat-card"><div class="stat-num" id="an-today">0</div><div class="stat-label">Visits today</div></div>
+          <div class="stat-card"><div class="stat-num" id="an-avgdur">0s</div><div class="stat-label">Avg. time on site</div></div>
+          <div class="stat-card"><div class="stat-num" id="an-mobile">0%</div><div class="stat-label">Mobile visitors</div></div>
+        </div>
+
+        <!-- Charts row -->
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+          <!-- Daily chart -->
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;">Visits — last 14 days</div>
+            <div id="barChart" style="display:flex;align-items:flex-end;gap:6px;height:100px;"></div>
+            <div id="barLabels" style="display:flex;gap:6px;margin-top:6px;"></div>
+          </div>
+          <!-- Pages -->
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;">Pages</div>
+            <div id="pageBreakdown"></div>
+          </div>
+          <!-- Devices -->
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;">Devices &amp; browsers</div>
+            <div id="deviceBreakdown"></div>
+          </div>
+        </div>
+
+        <!-- Country + referrers row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;">🌍 Countries</div>
+            <div id="countryBreakdown"></div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;">Top referrers</div>
+            <div id="referrerBreakdown"></div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;">Browsers</div>
+            <div id="browserBreakdown"></div>
+          </div>
+        </div>
+
+        <!-- UK vs Nigeria highlight -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;" id="ukNgRow">
+          <div style="background:var(--brand-dark);border-radius:12px;padding:24px;display:flex;align-items:center;gap:20px;">
+            <div style="font-size:36px;">🇬🇧</div>
+            <div>
+              <div style="font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--tan);margin-bottom:4px;">United Kingdom</div>
+              <div style="font-size:32px;font-weight:500;color:var(--white);line-height:1;" id="ukCount">0</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;" id="ukPct">0% of visits</div>
+            </div>
+          </div>
+          <div style="background:var(--brand);border-radius:12px;padding:24px;display:flex;align-items:center;gap:20px;">
+            <div style="font-size:36px;">🇳🇬</div>
+            <div>
+              <div style="font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--tan);margin-bottom:4px;">Nigeria</div>
+              <div style="font-size:32px;font-weight:500;color:var(--white);line-height:1;" id="ngCount">0</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;" id="ngPct">0% of visits</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent visits log -->
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Page</th><th>Country</th><th>City</th><th>Device</th><th>Browser</th><th>Referrer</th><th>Duration</th><th>Date &amp; time</th></tr></thead>
+            <tbody id="analyticsTable"><tr><td colspan="8" class="empty-state">No visits recorded yet — visits are logged when a page is closed or navigated away from.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- DETAIL DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <div class="drawer-title" id="drawerTitle"></div>
+  <div class="drawer-sub" id="drawerSub"></div>
+  <div id="drawerBody"></div>
+  <div class="drawer-actions" id="drawerActions"></div>
+</div>
+
+<script>
+  const ADMIN_PASSWORD = '4orth@Admin2026';
+  let currentDrawerId = null;
+  let currentDrawerType = null;
+  let memberFilter = { search: '', status: 'all' };
+  let bookingFilter = { search: '', status: 'all' };
+  let messageFilter = { search: '', status: 'all' };
+
+  function doLogin() {
+    const pw = document.getElementById('pwInput').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminShell').style.display = 'block';
+      sessionStorage.setItem('4orth_admin', '1');
+      refreshAll();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('4orth_admin');
+    location.reload();
+  }
+
+  if (sessionStorage.getItem('4orth_admin')) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminShell').style.display = 'block';
+    setTimeout(refreshAll, 50);
+  }
+
+  function getData(key) { return JSON.parse(localStorage.getItem(key) || '[]'); }
+  function setData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+  function refreshAll() {
+    refreshStats();
+    renderMembers();
+    renderBookings();
+    renderMessages();
+    renderActivity();
+  }
+
+  function refreshStats() {
+    const members = getData('4orth_members');
+    const bookings = getData('4orth_bookings');
+    const messages = getData('4orth_messages');
+    const pending = members.filter(m => m.status === 'pending').length;
+    document.getElementById('stat-members').textContent = members.length;
+    document.getElementById('stat-pending').textContent = pending;
+    document.getElementById('stat-bookings').textContent = bookings.length;
+    document.getElementById('stat-messages').textContent = messages.length;
+    document.getElementById('membersBadge').textContent = pending;
+    document.getElementById('bookingsBadge').textContent = bookings.filter(b => b.status === 'pending').length;
+    document.getElementById('messagesBadge').textContent = messages.filter(m => m.status === 'new').length;
+  }
+
+  function fmt(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function tierBadge(t) {
+    if (!t) return '';
+    const map = { signature: 'badge-sig', residency: 'badge-res', executive: 'badge-exec' };
+    return `<span class="badge ${map[t] || 'badge-sig'}">${t.charAt(0).toUpperCase()+t.slice(1)}</span>`;
+  }
+
+  function statusBadge(s) {
+    const map = { pending: 'badge-pending', confirmed: 'badge-confirmed', rejected: 'badge-rejected', new: 'badge-new', read: 'badge-read' };
+    return `<span class="badge ${map[s] || 'badge-pending'}">${s || 'pending'}</span>`;
+  }
+
+  /* ---- MEMBERS ---- */
+  function renderMembers() {
+    let data = getData('4orth_members');
+    if (memberFilter.status !== 'all') data = data.filter(m => m.status === memberFilter.status);
+    if (memberFilter.search) {
+      const q = memberFilter.search.toLowerCase();
+      data = data.filter(m => (m.firstName+' '+m.lastName+' '+m.email).toLowerCase().includes(q));
+    }
+    const tb = document.getElementById('membersTable');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="7" class="empty-state">No members found</td></tr>'; return; }
+    tb.innerHTML = data.map(m => `
+      <tr>
+        <td><strong>${m.firstName||''} ${m.lastName||''}</strong></td>
+        <td class="muted">${m.email||''}</td>
+        <td>${tierBadge(m.membershipTier)}</td>
+        <td class="muted">${m.occupation||'—'}</td>
+        <td class="muted">${fmt(m.submittedAt)}</td>
+        <td>${statusBadge(m.status)}</td>
+        <td>
+          <button class="action-btn btn-confirm" onclick="updateStatus('4orth_members','${m.id}','confirmed')">Confirm</button>
+          <button class="action-btn btn-reject" onclick="updateStatus('4orth_members','${m.id}','rejected')">Decline</button>
+          <button class="action-btn btn-mark-read" onclick="openDrawer('member','${m.id}')">View</button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterMembers(q) { memberFilter.search = q; renderMembers(); }
+  function filterMemberStatus(s, btn) {
+    memberFilter.status = s;
+    document.querySelectorAll('#panel-members .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMembers();
+  }
+
+  /* ---- BOOKINGS ---- */
+  function renderBookings() {
+    let data = getData('4orth_bookings');
+    if (bookingFilter.status !== 'all') data = data.filter(b => b.status === bookingFilter.status);
+    if (bookingFilter.search) {
+      const q = bookingFilter.search.toLowerCase();
+      data = data.filter(b => (b.name+' '+b.email+' '+(b.interest||'')).toLowerCase().includes(q));
+    }
+    const tb = document.getElementById('bookingsTable');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="6" class="empty-state">No bookings yet</td></tr>'; return; }
+    tb.innerHTML = data.map(b => `
+      <tr>
+        <td><strong>${b.name||''}</strong></td>
+        <td class="muted">${b.email||''}</td>
+        <td>${b.interest||'—'}</td>
+        <td class="muted">${fmt(b.submittedAt)}</td>
+        <td>${statusBadge(b.status)}</td>
+        <td>
+          <button class="action-btn btn-confirm" onclick="updateStatus('4orth_bookings','${b.id}','confirmed')">Confirm</button>
+          <button class="action-btn btn-reject" onclick="updateStatus('4orth_bookings','${b.id}','rejected')">Decline</button>
+          <button class="action-btn btn-mark-read" onclick="openDrawer('booking','${b.id}')">View</button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterBookings(q) { bookingFilter.search = q; renderBookings(); }
+  function filterBookingStatus(s, btn) {
+    bookingFilter.status = s;
+    document.querySelectorAll('#panel-bookings .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderBookings();
+  }
+
+  /* ---- MESSAGES ---- */
+  function renderMessages() {
+    let data = getData('4orth_messages');
+    if (messageFilter.status !== 'all') data = data.filter(m => m.status === messageFilter.status);
+    if (messageFilter.search) {
+      const q = messageFilter.search.toLowerCase();
+      data = data.filter(m => (m.name+' '+m.email+' '+(m.message||'')).toLowerCase().includes(q));
+    }
+    const tb = document.getElementById('messagesTable');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="6" class="empty-state">No messages yet</td></tr>'; return; }
+    tb.innerHTML = data.map(m => `
+      <tr>
+        <td><strong>${m.name||''}</strong></td>
+        <td class="muted">${m.email||''}</td>
+        <td class="muted">${m.interest||m.message?.substring(0,60)||'—'}${(m.message?.length>60)?'…':''}</td>
+        <td class="muted">${fmt(m.submittedAt)}</td>
+        <td>${statusBadge(m.status||'new')}</td>
+        <td>
+          <button class="action-btn btn-mark-read" onclick="updateStatus('4orth_messages','${m.id}','read');openDrawer('message','${m.id}')">View</button>
+          <button class="action-btn btn-delete" onclick="deleteItem('4orth_messages','${m.id}')">Delete</button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterMessages(q) { messageFilter.search = q; renderMessages(); }
+  function filterMessageStatus(s, btn) {
+    messageFilter.status = s;
+    document.querySelectorAll('#panel-messages .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMessages();
+  }
+
+  /* ---- ACTIVITY ---- */
+  function renderActivity() {
+    const all = [
+      ...getData('4orth_members').map(m => ({ label: `${m.firstName} ${m.lastName}`, type: 'Member registration', date: m.submittedAt, status: m.status })),
+      ...getData('4orth_bookings').map(b => ({ label: b.name, type: 'Space booking', date: b.submittedAt, status: b.status })),
+      ...getData('4orth_messages').map(m => ({ label: m.name, type: 'Contact message', date: m.submittedAt, status: m.status||'new' }))
+    ].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+    const tb = document.getElementById('activityTable');
+    if (!all.length) { tb.innerHTML = '<tr><td colspan="4" class="empty-state">No activity yet</td></tr>'; return; }
+    tb.innerHTML = all.map(a => `<tr><td>${a.label}</td><td class="muted">${a.type}</td><td class="muted">${fmt(a.date)}</td><td>${statusBadge(a.status)}</td></tr>`).join('');
+  }
+
+  /* ---- STATUS UPDATE ---- */
+  function updateStatus(key, id, status) {
+    const data = getData(key);
+    const item = data.find(d => d.id === id);
+    if (item) { item.status = status; setData(key, data); refreshAll(); }
+    if (currentDrawerId === id) openDrawer(currentDrawerType, id);
+  }
+
+  function deleteItem(key, id) {
+    if (!confirm('Delete this item?')) return;
+    const data = getData(key).filter(d => d.id !== id);
+    setData(key, data); refreshAll(); closeDrawer();
+  }
+
+  /* ---- DRAWER ---- */
+  function openDrawer(type, id) {
+    currentDrawerId = id; currentDrawerType = type;
+    const keyMap = { member: '4orth_members', booking: '4orth_bookings', message: '4orth_messages' };
+    const item = getData(keyMap[type]).find(d => d.id === id);
+    if (!item) return;
+
+    const titleMap = { member: `${item.firstName||''} ${item.lastName||''}`, booking: item.name||'Booking', message: item.name||'Message' };
+    const subMap = { member: `Membership registration · ${item.membershipTier||''}`, booking: `Space booking · ${item.interest||''}`, message: `Contact enquiry · ${fmt(item.submittedAt)}` };
+
+    document.getElementById('drawerTitle').textContent = titleMap[type];
+    document.getElementById('drawerSub').textContent = subMap[type];
+
+    const skip = ['id','type','status'];
+    const labels = { firstName:'First name', lastName:'Last name', email:'Email', phone:'Phone', dob:'Date of birth', gender:'Gender', occupation:'Occupation', organisation:'Organisation', sector:'Sector', linkedin:'LinkedIn', whyJoin:'Why joining', referral:'Referral', membershipTier:'Membership tier', submittedAt:'Submitted', newsletter:'Newsletter opt-in', consent:'Consent given', name:'Name', interest:'Interest', message:'Message', phone2:'Phone' };
+
+    document.getElementById('drawerBody').innerHTML = Object.entries(item).filter(([k]) => !skip.includes(k)).map(([k,v]) => `
+      <div class="detail-row">
+        <div class="detail-key">${labels[k]||k}</div>
+        <div class="detail-val">${v===true?'Yes':v===false?'No':v||'—'}</div>
+      </div>`).join('');
+
+    const actions = document.getElementById('drawerActions');
+    if (type === 'member') {
+      actions.innerHTML = `
+        <button class="drawer-btn btn-confirm" onclick="updateStatus('4orth_members','${id}','confirmed')">Confirm member</button>
+        <button class="drawer-btn btn-reject" onclick="updateStatus('4orth_members','${id}','rejected')">Decline</button>
+        <button class="drawer-btn btn-delete" onclick="deleteItem('4orth_members','${id}')">Delete</button>`;
+    } else if (type === 'booking') {
+      actions.innerHTML = `
+        <button class="drawer-btn btn-confirm" onclick="updateStatus('4orth_bookings','${id}','confirmed')">Confirm booking</button>
+        <button class="drawer-btn btn-reject" onclick="updateStatus('4orth_bookings','${id}','rejected')">Decline</button>
+        <button class="drawer-btn btn-delete" onclick="deleteItem('4orth_bookings','${id}')">Delete</button>`;
+    } else {
+      actions.innerHTML = `
+        <button class="drawer-btn btn-mark-read" onclick="updateStatus('4orth_messages','${id}','read')">Mark read</button>
+        <button class="drawer-btn btn-delete" onclick="deleteItem('4orth_messages','${id}')">Delete</button>`;
+    }
+
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('open');
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    currentDrawerId = null; currentDrawerType = null;
+  }
+
+  /* ---- PANELS ---- */
+
+  /* ---- EXPORT CSV ---- */
+  function exportCSV(type) {
+    const keyMap = { members: '4orth_members', bookings: '4orth_bookings', messages: '4orth_messages' };
+    const data = getData(keyMap[type]);
+    if (!data.length) { alert('No data to export.'); return; }
+    const keys = Object.keys(data[0]);
+    const csv = [keys.join(','), ...data.map(row => keys.map(k => `"${(row[k]||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = `4orth_${type}_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  /* Wire up contact form on main site to save to localStorage */
+  window.addEventListener('storage', () => refreshAll());
+
+  /* ---- ANALYTICS ---- */
+  function renderAnalytics() {
+    const visits = getData('4orth_analytics');
+    if (!visits.length) return;
+
+    const today = new Date().toISOString().slice(0,10);
+    const todayVisits = visits.filter(v => v.timestamp && v.timestamp.slice(0,10) === today).length;
+    const durations = visits.filter(v => v.duration > 0).map(v => v.duration);
+    const avgDur = durations.length ? Math.round(durations.reduce((a,b) => a+b, 0) / durations.length) : 0;
+    const mobileCount = visits.filter(v => v.device === 'Mobile').length;
+    const mobilePct = visits.length ? Math.round((mobileCount / visits.length) * 100) : 0;
+
+    document.getElementById('an-total').textContent = visits.length;
+    document.getElementById('an-today').textContent = todayVisits;
+    document.getElementById('an-avgdur').textContent = avgDur >= 60 ? Math.round(avgDur/60) + 'm' : avgDur + 's';
+    document.getElementById('an-mobile').textContent = mobilePct + '%';
+
+    // Bar chart — last 14 days
+    const days = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      days.push(d.toISOString().slice(0,10));
+    }
+    const dayCounts = days.map(d => visits.filter(v => v.timestamp && v.timestamp.slice(0,10) === d).length);
+    const maxCount = Math.max(...dayCounts, 1);
+    const barChart = document.getElementById('barChart');
+    const barLabels = document.getElementById('barLabels');
+    barChart.innerHTML = dayCounts.map((c, i) => {
+      const h = Math.max(4, Math.round((c / maxCount) * 100));
+      return `<div title="${days[i]}: ${c} visit${c!==1?'s':''}" style="flex:1;background:${c>0?'var(--brand)':'var(--border)'};height:${h}px;border-radius:3px 3px 0 0;cursor:default;transition:opacity .2s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"></div>`;
+    }).join('');
+    barLabels.innerHTML = days.map((d, i) => {
+      const label = i % 2 === 0 ? new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+      return `<div style="flex:1;font-size:9px;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;">${label}</div>`;
+    }).join('');
+
+    // Page breakdown
+    renderBreakdown('pageBreakdown', visits, 'page', 'var(--brand)');
+    // Device breakdown
+    renderBreakdown('deviceBreakdown', visits, 'device', 'var(--tan-dark)');
+    // Referrers
+    renderBreakdown('referrerBreakdown', visits, 'referrer', 'var(--brand)');
+    // Browsers
+    renderBreakdown('browserBreakdown', visits, 'browser', 'var(--tan-dark)');
+    // Countries
+    renderBreakdown('countryBreakdown', visits, 'country', 'var(--brand)');
+
+    // UK vs Nigeria highlights
+    const total = visits.length || 1;
+    const ukCount = visits.filter(v => v.countryCode === 'GB' || v.country === 'United Kingdom').length;
+    const ngCount = visits.filter(v => v.countryCode === 'NG' || v.country === 'Nigeria').length;
+    document.getElementById('ukCount').textContent = ukCount;
+    document.getElementById('ukPct').textContent = Math.round((ukCount/total)*100) + '% of visits';
+    document.getElementById('ngCount').textContent = ngCount;
+    document.getElementById('ngPct').textContent = Math.round((ngCount/total)*100) + '% of visits';
+
+    // Recent visits table
+    const tb = document.getElementById('analyticsTable');
+    const recent = visits.slice(0, 50);
+    if (!recent.length) { tb.innerHTML = '<tr><td colspan="8" class="empty-state">No visits yet</td></tr>'; return; }
+    tb.innerHTML = recent.map(v => {
+      const flag = v.countryCode ? `<span title="${v.country||''}" style="margin-right:5px;">` + countryFlag(v.countryCode) + '</span>' : '';
+      const dur = v.duration > 0 ? (v.duration >= 60 ? Math.round(v.duration/60)+'m' : v.duration+'s') : '—';
+      const ref = (v.referrer||'Direct').replace(/^https?:\/\/(www\.)?/,'').split('/')[0];
+      return `<tr>
+        <td>${v.page||v.path||'—'}</td>
+        <td>${flag}<span style="font-size:13px;">${v.country||'—'}</span></td>
+        <td class="muted">${v.city||'—'}</td>
+        <td class="muted">${v.device||'—'}</td>
+        <td class="muted">${v.browser||'—'}</td>
+        <td class="muted" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${v.referrer||''}">${ref}</td>
+        <td class="muted">${dur}</td>
+        <td class="muted">${fmt(v.timestamp)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function countryFlag(code) {
+    if (!code || code.length !== 2) return '';
+    return code.toUpperCase().split('').map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join('');
+  }
+
+  function renderBreakdown(elId, visits, key, color) {
+    const el = document.getElementById(elId);
+    const counts = {};
+    visits.forEach(v => { const k = v[key]||'Unknown'; counts[k] = (counts[k]||0)+1; });
+    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5);
+    const total = visits.length || 1;
+    el.innerHTML = sorted.map(([label, count]) => {
+      const pct = Math.round((count/total)*100);
+      const shortLabel = label.length > 28 ? label.slice(0,26)+'…' : label;
+      return `<div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+          <span style="color:var(--text);" title="${label}">${shortLabel}</span>
+          <span style="color:var(--muted);">${count} <span style="font-size:10px;">(${pct}%)</span></span>
+        </div>
+        <div style="height:4px;background:var(--border);border-radius:2px;">
+          <div style="height:4px;width:${pct}%;background:${color};border-radius:2px;transition:width .4s;"></div>
+        </div>
+      </div>`;
+    }).join('') || '<div style="font-size:13px;color:var(--muted);">No data yet</div>';
+  }
+
+  function exportAnalyticsCSV() {
+    const visits = getData('4orth_analytics');
+    if (!visits.length) { alert('No analytics data to export.'); return; }
+    const keys = ['page','device','browser','referrer','duration','timestamp'];
+    const csv = [keys.join(','), ...visits.map(v => keys.map(k => `"${(v[k]||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+    a.download = `4orth_analytics_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  function showPanel(name, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-'+name).classList.add('active');
+    if (btn) btn.classList.add('active');
+    refreshAll();
+    if (name === 'analytics') renderAnalytics();
+  }
+</script>
+</body>
+</html>
