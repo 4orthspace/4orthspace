@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4orth SPACE — The Fourth Space | Premium Workspace & Creative Club, Abuja</title>
+<meta name="description" content="Beyond home, work, and the social. 4orth is Abuja's fourth space — a members' club and creative workspace in Guzape where ambition is at home.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --espresso:#15110C;      /* primary dark */
+  --espresso-2:#1F1810;    /* raised surface */
+  --espresso-3:#2A2117;    /* hairline / borders on dark */
+  --brass:#C9A45C;         /* single accent */
+  --brass-bright:#E8CF94;
+  --bone:#EDE6D8;          /* warm light + text on dark */
+  --bone-2:#F5F0E6;        /* light section bg */
+  --muted:rgba(237,230,216,.58);
+  --muted-dark:rgba(21,17,12,.62);
+  --maxw:1240px;
+  --r:14px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --f-disp:"Fraunces",Georgia,serif;
+  --f-body:"Hanken Grotesk",system-ui,sans-serif;
+  --f-mono:"Space Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--f-body);
+  background:var(--espresso);
+  color:var(--bone);
+  line-height:1.6;
+  font-weight:350;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--f-disp);font-weight:380;line-height:1.04;letter-spacing:-.015em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:var(--brass);color:var(--espresso)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);font-weight:400}
+.serif-i{font-style:italic;font-family:var(--f-disp)}
+
+/* focus */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--brass);outline-offset:3px;border-radius:4px;
+}
+
+/* ============ REVEAL ============ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ============ NAV ============ */
+header{position:fixed;inset:0 0 auto 0;z-index:100;transition:background .4s var(--ease),border-color .4s var(--ease),backdrop-filter .4s}
+header.scrolled{background:rgba(21,17,12,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--espresso-3)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+.brand{display:flex;align-items:baseline;gap:.05em;font-family:var(--f-disp);font-size:1.55rem;letter-spacing:-.02em}
+.brand b{font-weight:500}
+.brand .four{color:var(--brass);font-weight:500}
+.brand .mono{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;align-self:center;margin-left:.55rem;border-left:1px solid var(--espresso-3);padding-left:.55rem}
+.nav-links{display:flex;align-items:center;gap:34px;list-style:none}
+.nav-links a{font-size:.9rem;color:var(--muted);transition:color .25s;position:relative}
+.nav-links a:hover{color:var(--bone)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--brass);transition:width .3s var(--ease)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{font-family:var(--f-mono);font-size:.74rem!important;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--brass);color:var(--brass)!important;padding:11px 20px;border-radius:40px;transition:background .3s,color .3s}
+.nav-cta::after{display:none}
+.nav-cta:hover{background:var(--brass);color:var(--espresso)!important}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:8px}
+.burger span{width:26px;height:1.5px;background:var(--bone);transition:.3s var(--ease)}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* mobile drawer */
+.drawer{position:fixed;inset:0;z-index:99;background:var(--espresso);transform:translateX(100%);transition:transform .5s var(--ease);display:flex;flex-direction:column;justify-content:center;padding:0 32px;visibility:hidden}
+.drawer.open{transform:none;visibility:visible}
+.drawer a{font-family:var(--f-disp);font-size:2.4rem;padding:14px 0;border-bottom:1px solid var(--espresso-3);color:var(--bone);display:flex;align-items:baseline;gap:14px}
+.drawer a .n{font-family:var(--f-mono);font-size:.8rem;color:var(--brass)}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding-top:120px;padding-bottom:70px;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--espresso-3) 1px,transparent 1px),linear-gradient(90deg,var(--espresso-3) 1px,transparent 1px);background-size:88px 88px;opacity:.4;mask-image:radial-gradient(120% 90% at 70% 20%,#000 35%,transparent 75%);-webkit-mask-image:radial-gradient(120% 90% at 70% 20%,#000 35%,transparent 75%)}
+.hero-glow{position:absolute;width:760px;height:760px;right:-180px;top:-160px;border-radius:50%;background:radial-gradient(circle,rgba(201,164,92,.16),transparent 62%);filter:blur(8px);animation:float 14s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(34px) scale(1.04)}}
+@media (prefers-reduced-motion:reduce){.hero-glow{animation:none}}
+.hero .wrap{position:relative;z-index:2}
+.hero-tag{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--espresso-3);border-radius:40px;padding:8px 16px 8px 8px;margin-bottom:34px;background:rgba(31,24,16,.5)}
+.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 4px rgba(201,164,92,.18)}
+.hero-tag span{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(3.1rem,9vw,7.2rem);line-height:.96;letter-spacing:-.03em;max-width:14ch}
+.hero h1 .ln{display:block;overflow:hidden}
+.hero h1 .ln i{display:block;font-style:italic;color:var(--brass)}
+.hero-sub{margin-top:30px;font-size:clamp(1.05rem,1.7vw,1.32rem);max-width:46ch;color:var(--muted);font-weight:300}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px;margin-top:42px}
+.btn{font-family:var(--f-mono);font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:16px 30px;border-radius:46px;cursor:pointer;border:1px solid transparent;transition:transform .25s var(--ease),background .3s,color .3s,border-color .3s;display:inline-flex;align-items:center;gap:10px}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--brass);color:var(--espresso);font-weight:700}
+.btn-primary:hover{background:var(--brass-bright)}
+.btn-ghost{border-color:var(--espresso-3);color:var(--bone)}
+.btn-ghost:hover{border-color:var(--brass);color:var(--brass)}
+.hero-meta{display:flex;gap:44px;margin-top:66px;flex-wrap:wrap}
+.hero-meta div .k{font-family:var(--f-disp);font-size:1.9rem;color:var(--bone)}
+.hero-meta div .l{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* ============ FOURTH SPACE (signature) ============ */
+.fourth{padding:120px 0;border-top:1px solid var(--espresso-3)}
+.fourth .lead{font-family:var(--f-disp);font-size:clamp(1.7rem,3.6vw,2.9rem);line-height:1.18;max-width:20ch;font-weight:340;margin-top:18px}
+.fourth .lead em{color:var(--brass)}
+.places{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:70px;border-top:1px solid var(--espresso-3)}
+.place{padding:34px 28px 38px;border-right:1px solid var(--espresso-3);position:relative;transition:background .4s var(--ease)}
+.place:last-child{border-right:0}
+.place.is4{background:linear-gradient(180deg,rgba(201,164,92,.08),transparent)}
+.place .n{font-family:var(--f-mono);font-size:.82rem;color:var(--muted);letter-spacing:.1em}
+.place.is4 .n{color:var(--brass)}
+.place h3{font-size:1.55rem;margin:18px 0 10px}
+.place.is4 h3{color:var(--brass)}
+.place p{font-size:.92rem;color:var(--muted);font-weight:300}
+.place .bar{height:2px;background:var(--espresso-3);margin-top:24px;position:relative;overflow:hidden}
+.place .bar i{position:absolute;inset:0;width:30%;background:var(--brass)}
+.place:nth-child(1) .bar i{width:25%}
+.place:nth-child(2) .bar i{width:50%}
+.place:nth-child(3) .bar i{width:75%}
+.place.is4 .bar i{width:100%}
+
+/* ============ SECTION HEAD ============ */
+.shead{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:54px}
+.shead h2{font-size:clamp(2.1rem,4.6vw,3.5rem);max-width:18ch}
+.shead h2 em{color:var(--brass)}
+.shead p{max-width:38ch;color:var(--muted);font-weight:300}
+
+/* ============ VALUES ============ */
+.values{padding:120px 0;background:var(--bone-2);color:var(--espresso)}
+.values .eyebrow{color:#9a7b39}
+.values .shead h2 em,.values .vcard h3 .num{color:#9a7b39}
+.values .shead p{color:var(--muted-dark)}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(21,17,12,.12);border:1px solid rgba(21,17,12,.12);border-radius:var(--r);overflow:hidden}
+.vcard{background:var(--bone-2);padding:42px 34px;transition:background .4s var(--ease)}
+.vcard:hover{background:#fff}
+.vcard .num{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.12em;color:#9a7b39}
+.vcard h3{font-size:1.6rem;margin:22px 0 12px}
+.vcard p{font-size:.96rem;color:var(--muted-dark)}
+
+/* ============ STATS ============ */
+.stats{padding:110px 0;border-top:1px solid var(--espresso-3)}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
+.stat{border-top:2px solid var(--brass);padding-top:22px}
+.stat .num{font-family:var(--f-disp);font-size:clamp(2.8rem,6vw,4.4rem);line-height:1;letter-spacing:-.03em}
+.stat .num span{color:var(--brass)}
+.stat .lab{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+
+/* ============ SPACES ============ */
+.spaces{padding:120px 0;background:var(--espresso-2)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:42px}
+.filter{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;border-radius:40px;border:1px solid var(--espresso-3);background:none;color:var(--muted);cursor:pointer;transition:.3s var(--ease)}
+.filter:hover{color:var(--bone);border-color:var(--brass)}
+.filter.active{background:var(--brass);color:var(--espresso);border-color:var(--brass);font-weight:700}
+.sp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.sp-card{border-radius:var(--r);overflow:hidden;background:var(--espresso);border:1px solid var(--espresso-3);transition:transform .5s var(--ease),border-color .4s;display:flex;flex-direction:column}
+.sp-card.hide{display:none}
+.sp-card:hover{transform:translateY(-6px);border-color:var(--brass)}
+.sp-media{aspect-ratio:4/3;position:relative;overflow:hidden}
+.sp-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:saturate(.85) brightness(.92)}
+.sp-card:hover .sp-media img{transform:scale(1.06)}
+.sp-cat{position:absolute;top:14px;left:14px;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;background:rgba(21,17,12,.78);backdrop-filter:blur(6px);color:var(--brass);padding:6px 12px;border-radius:30px;border:1px solid var(--espresso-3)}
+.sp-body{padding:24px 24px 26px;flex:1;display:flex;flex-direction:column}
+.sp-body h3{font-size:1.4rem;margin-bottom:8px}
+.sp-body p{font-size:.9rem;color:var(--muted);font-weight:300;flex:1}
+.sp-foot{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--espresso-3)}
+.sp-price{font-family:var(--f-mono);font-size:.82rem;color:var(--bone)}
+.sp-price b{color:var(--brass);font-weight:700}
+.sp-foot a{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);display:inline-flex;gap:6px;align-items:center}
+.sp-foot a:hover{gap:11px;transition:gap .25s}
+
+/* ============ MEMBERSHIPS ============ */
+.members{padding:120px 0}
+.toggle{display:inline-flex;align-items:center;gap:16px;background:var(--espresso-2);border:1px solid var(--espresso-3);border-radius:46px;padding:6px;margin-top:8px}
+.toggle button{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;padding:11px 22px;border-radius:40px;border:0;background:none;color:var(--muted);cursor:pointer;transition:.3s}
+.toggle button.on{background:var(--brass);color:var(--espresso);font-weight:700}
+.toggle .save{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);padding-right:12px}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:54px}
+.plan{border:1px solid var(--espresso-3);border-radius:var(--r);padding:38px 32px;background:var(--espresso-2);display:flex;flex-direction:column;position:relative;transition:transform .4s var(--ease),border-color .4s}
+.plan:hover{transform:translateY(-6px)}
+.plan.feat{border-color:var(--brass);background:linear-gradient(180deg,rgba(201,164,92,.07),var(--espresso-2))}
+.plan .badge{position:absolute;top:-12px;left:32px;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;background:var(--brass);color:var(--espresso);padding:6px 14px;border-radius:30px;font-weight:700}
+.plan .pname{font-family:var(--f-disp);font-size:1.7rem}
+.plan .pdesc{font-size:.88rem;color:var(--muted);font-weight:300;margin:8px 0 26px;min-height:2.6em}
+.plan .price{display:flex;align-items:baseline;gap:6px}
+.plan .price .cur{font-family:var(--f-mono);font-size:1rem;color:var(--brass)}
+.plan .price .amt{font-family:var(--f-disp);font-size:3rem;letter-spacing:-.03em;transition:opacity .25s}
+.plan .price .per{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);letter-spacing:.06em}
+.plan ul{list-style:none;margin:28px 0 30px;display:flex;flex-direction:column;gap:13px;flex:1}
+.plan li{font-size:.92rem;color:var(--bone);display:flex;gap:12px;align-items:flex-start;font-weight:300}
+.plan li svg{flex:none;margin-top:4px}
+.plan .btn{width:100%;justify-content:center}
+.plan:not(.feat) .btn{background:none;border-color:var(--espresso-3);color:var(--bone)}
+.plan:not(.feat) .btn:hover{border-color:var(--brass);color:var(--brass)}
+
+/* ============ BOOKING ============ */
+.booking{padding:120px 0;background:var(--bone-2);color:var(--espresso)}
+.booking .eyebrow{color:#9a7b39}
+.booking .shead h2 em{color:#9a7b39}
+.booking .shead p{color:var(--muted-dark)}
+.bk-wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:0;border:1px solid rgba(21,17,12,.14);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 30px 80px -40px rgba(21,17,12,.4)}
+.bk-form{padding:40px}
+.bk-tabs{display:flex;gap:8px;margin-bottom:30px;border-bottom:1px solid rgba(21,17,12,.1);padding-bottom:0}
+.bk-tab{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;padding:12px 4px;margin-right:18px;border:0;background:none;color:var(--muted-dark);cursor:pointer;position:relative;transition:color .25s}
+.bk-tab.on{color:var(--espresso);font-weight:700}
+.bk-tab.on::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--brass)}
+.bk-pane{display:none;animation:fade .4s var(--ease)}
+.bk-pane.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.field{margin-bottom:20px}
+.field label{display:block;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-dark);margin-bottom:8px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+input,select,textarea{width:100%;font-family:var(--f-body);font-size:.95rem;padding:13px 14px;border:1px solid rgba(21,17,12,.18);border-radius:10px;background:#fdfbf6;color:var(--espresso);transition:border-color .25s,box-shadow .25s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brass);box-shadow:0 0 0 3px rgba(201,164,92,.25)}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a7b39' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.err{color:#a3401f;font-size:.78rem;margin-top:6px;display:none;font-family:var(--f-mono);letter-spacing:.02em}
+.field.invalid input,.field.invalid select{border-color:#a3401f;background:#fdf3ef}
+.field.invalid .err{display:block}
+.bk-form .btn{background:var(--espresso);color:var(--bone);width:100%;justify-content:center;margin-top:8px}
+.bk-form .btn:hover{background:#000}
+
+/* summary */
+.bk-summary{background:var(--espresso);color:var(--bone);padding:40px;display:flex;flex-direction:column}
+.bk-summary .eyebrow{color:var(--brass)}
+.bk-summary h3{font-size:1.6rem;margin:14px 0 26px}
+.sum-line{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--espresso-3);font-size:.9rem}
+.sum-line .k{color:var(--muted)}
+.sum-line .v{text-align:right;font-weight:400}
+.sum-total{margin-top:auto;padding-top:26px}
+.sum-total .row{display:flex;justify-content:space-between;align-items:baseline}
+.sum-total .lab{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sum-total .big{font-family:var(--f-disp);font-size:2.6rem;letter-spacing:-.03em;color:var(--brass)}
+.sum-note{font-size:.74rem;color:var(--muted);margin-top:10px;font-weight:300}
+.bk-success{display:none;text-align:center;padding:50px 20px}
+.bk-success.show{display:block;animation:fade .5s var(--ease)}
+.bk-success .ring{width:64px;height:64px;border-radius:50%;border:2px solid var(--brass);display:grid;place-items:center;margin:0 auto 22px}
+.bk-success h3{font-size:1.7rem;margin-bottom:12px}
+.bk-success p{color:var(--muted-dark);font-size:.95rem;max-width:34ch;margin:0 auto 8px}
+.bk-success .ref{font-family:var(--f-mono);font-size:.85rem;color:#9a7b39;margin-top:18px;letter-spacing:.06em}
+.bk-success button{margin-top:26px}
+
+/* ============ TESTIMONIALS ============ */
+.testi{padding:120px 0;border-top:1px solid var(--espresso-3)}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px}
+.tcard{border:1px solid var(--espresso-3);border-radius:var(--r);padding:34px;background:var(--espresso-2);display:flex;flex-direction:column}
+.tcard .q{font-family:var(--f-disp);font-size:1.18rem;line-height:1.45;font-style:italic;flex:1}
+.tcard .q::before{content:"\201C";color:var(--brass);font-size:2.4rem;line-height:0;vertical-align:-.4em;margin-right:.1em}
+.tperson{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:22px;border-top:1px solid var(--espresso-3)}
+.tperson .av{width:44px;height:44px;border-radius:50%;background:var(--brass);color:var(--espresso);display:grid;place-items:center;font-family:var(--f-disp);font-size:1.1rem;font-weight:500}
+.tperson .nm{font-size:.95rem;font-weight:400}
+.tperson .ro{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* ============ FAQ ============ */
+.faq{padding:120px 0;background:var(--espresso-2)}
+.faq-list{max-width:880px;margin:50px auto 0}
+.qa{border-bottom:1px solid var(--espresso-3)}
+.qa button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 0;background:none;border:0;cursor:pointer;text-align:left;color:var(--bone);font-family:var(--f-disp);font-size:1.25rem}
+.qa button:hover{color:var(--brass)}
+.qa .ic{flex:none;width:30px;height:30px;border:1px solid var(--espresso-3);border-radius:50%;position:relative;transition:.3s}
+.qa .ic::before,.qa .ic::after{content:"";position:absolute;background:var(--brass);transition:.3s var(--ease)}
+.qa .ic::before{width:12px;height:1.5px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.qa .ic::after{width:1.5px;height:12px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.qa.open .ic{border-color:var(--brass);transform:rotate(90deg)}
+.qa.open .ic::after{opacity:0}
+.qa .ans{max-height:0;overflow:hidden;transition:max-height .45s var(--ease)}
+.qa .ans p{padding:0 0 26px;color:var(--muted);font-weight:300;max-width:64ch}
+
+/* ============ CONTACT ============ */
+.contact{padding:120px 0}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+.ct-info h2{font-size:clamp(2.1rem,4.6vw,3.3rem)}
+.ct-info h2 em{color:var(--brass)}
+.ct-info p{color:var(--muted);font-weight:300;margin-top:18px;max-width:40ch}
+.ct-list{margin-top:42px;display:flex;flex-direction:column;gap:2px}
+.ct-item{display:flex;gap:18px;align-items:flex-start;padding:22px 0;border-top:1px solid var(--espresso-3)}
+.ct-item .ic{flex:none;width:42px;height:42px;border:1px solid var(--espresso-3);border-radius:10px;display:grid;place-items:center;color:var(--brass)}
+.ct-item .lab{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ct-item .val{font-size:1.05rem;margin-top:3px}
+.ct-form{background:var(--espresso-2);border:1px solid var(--espresso-3);border-radius:18px;padding:40px}
+.ct-form .field label{color:var(--muted)}
+.ct-form input,.ct-form select,.ct-form textarea{background:var(--espresso);border-color:var(--espresso-3);color:var(--bone)}
+.ct-form textarea{resize:vertical;min-height:110px}
+.ct-form .btn{background:var(--brass);color:var(--espresso);width:100%;justify-content:center}
+.ct-form .err{color:#e8a06b}
+.ct-form .field.invalid input,.ct-form .field.invalid select,.ct-form .field.invalid textarea{border-color:#e8a06b;background:rgba(232,160,107,.06)}
+.ct-ok{display:none;background:rgba(201,164,92,.1);border:1px solid var(--brass);border-radius:12px;padding:18px;color:var(--brass);font-size:.92rem;margin-top:18px}
+.ct-ok.show{display:block;animation:fade .4s var(--ease)}
+
+/* ============ FOOTER ============ */
+footer{background:var(--espresso-2);border-top:1px solid var(--espresso-3);padding:80px 0 36px}
+.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding-bottom:60px;border-bottom:1px solid var(--espresso-3)}
+.ft-brand .brand{font-size:1.8rem;margin-bottom:18px}
+.ft-brand p{color:var(--muted);font-weight:300;max-width:34ch;font-size:.92rem}
+.ft-col h4{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:400;margin-bottom:20px}
+.ft-col a{display:block;color:var(--muted);font-size:.92rem;padding:7px 0;transition:color .25s}
+.ft-col a:hover{color:var(--bone)}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-top:30px}
+.ft-bot p{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;color:var(--muted)}
+.ft-social{display:flex;gap:12px}
+.ft-social a{width:38px;height:38px;border:1px solid var(--espresso-3);border-radius:50%;display:grid;place-items:center;color:var(--muted);transition:.3s}
+.ft-social a:hover{border-color:var(--brass);color:var(--brass);transform:translateY(-2px)}
+
+/* back to top */
+.totop{position:fixed;right:26px;bottom:26px;z-index:80;width:48px;height:48px;border-radius:50%;background:var(--brass);color:var(--espresso);border:0;cursor:pointer;display:grid;place-items:center;opacity:0;transform:translateY(20px);transition:.4s var(--ease);pointer-events:none}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:980px){
+  .places,.vgrid,.sp-grid,.mgrid,.tgrid,.sgrid{grid-template-columns:1fr 1fr}
+  .bk-wrap,.ct-grid{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .place{border-bottom:1px solid var(--espresso-3)}
+}
+@media (max-width:760px){
+  .wrap{padding:0 20px}
+  .nav-links,.nav-cta{display:none}
+  .burger{display:flex}
+  .places,.vgrid,.sp-grid,.mgrid,.tgrid,.sgrid{grid-template-columns:1fr}
+  .place{border-right:0}
+  .hero-meta{gap:30px}
+  .row2{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr}
+  .booking .bk-form,.bk-summary,.ct-form{padding:28px}
+  section,.fourth,.values,.stats,.spaces,.members,.booking,.testi,.faq,.contact{padding-top:80px!important;padding-bottom:80px!important}
+}
+
+/* ======================================================
+   OPERATIONS DASHBOARD  (all scoped under .dash)
+   ====================================================== */
+.dash{
+  --d-ok:#7ba35f;--d-warn:#d19a4b;--d-line:var(--espresso-3);
+  position:fixed;inset:0;z-index:200;background:var(--espresso);color:var(--bone);
+  overflow-y:auto;display:none;
+}
+.dash.open{display:block;animation:fade .35s var(--ease)}
+.dash .wrap{max-width:1220px;margin:0 auto;padding:0 28px}
+.dash-bar{position:sticky;top:0;z-index:5;background:rgba(21,17,12,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--d-line)}
+.dash-bar .in{display:flex;align-items:center;justify-content:space-between;height:70px}
+.dash-bar .brand{font-family:var(--f-disp);font-size:1.35rem}
+.dash-bar .brand .four{color:var(--brass);font-weight:500}
+.dash-bar .brand .mono{font-family:var(--f-mono);font-size:.58rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;margin-left:.5rem;border-left:1px solid var(--d-line);padding-left:.5rem}
+.dash-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.dash-live i{width:7px;height:7px;border-radius:50%;background:var(--d-ok);box-shadow:0 0 0 3px rgba(123,163,95,.2)}
+.dash-close{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--d-line);color:var(--bone);padding:9px 16px;border-radius:40px;cursor:pointer;transition:.25s}
+.dash-close:hover{border-color:var(--brass);color:var(--brass)}
+
+/* gate */
+.dash-gate{max-width:400px;margin:0 auto;text-align:center;padding:clamp(60px,12vh,140px) 0}
+.dash-gate .eyebrow{justify-content:center}
+.dash-gate h2{font-size:clamp(1.9rem,4vw,2.6rem);margin:16px 0 10px}
+.dash-gate p{color:var(--muted);font-weight:300;font-size:.95rem}
+.dash-gate .gate-field{text-align:left;margin-top:26px}
+.dash-gate label{display:block;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.dash-gate input{width:100%;font-family:var(--f-body);font-size:.95rem;padding:13px 14px;border:1px solid var(--d-line);border-radius:10px;background:var(--espresso-2);color:var(--bone);transition:.25s}
+.dash-gate input:focus{outline:none;border-color:var(--brass);box-shadow:0 0 0 3px rgba(201,164,92,.22)}
+.dash-gate .btn{width:100%;justify-content:center;margin-top:18px;background:var(--brass);color:var(--espresso);font-weight:700}
+.dash-gate .gate-err{display:none;color:#e0a06b;font-family:var(--f-mono);font-size:.74rem;margin-top:10px}
+.dash-gate.bad .gate-err{display:block}
+.dash-gate.bad input{border-color:#e0a06b}
+.dash-hint{margin-top:20px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted);letter-spacing:.02em}
+.dash-hint code{color:var(--brass)}
+
+/* app */
+.dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;padding:38px 0 4px}
+.dash-head h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+.dash-head .sub{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.dash-note{background:rgba(201,164,92,.08);border:1px solid rgba(201,164,92,.28);border-radius:12px;padding:13px 16px;font-size:.84rem;color:var(--muted);margin:22px 0 0;font-weight:300}
+.dash-note code{font-family:var(--f-mono);color:var(--brass);font-size:.8rem}
+
+.dash-tabs{display:flex;gap:4px;margin:26px 0 30px;border-bottom:1px solid var(--d-line);overflow-x:auto}
+.dash-tab{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:0;border-bottom:2px solid transparent;padding:13px 16px;color:var(--muted);white-space:nowrap;cursor:pointer;transition:color .2s}
+.dash-tab:hover{color:var(--bone)}
+.dash-tab.on{color:var(--brass);border-bottom-color:var(--brass)}
+.dash-tab .cnt{color:var(--brass);font-size:.72rem}
+
+.d-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--d-line);border:1px solid var(--d-line);border-radius:14px;overflow:hidden;margin-bottom:28px}
+.d-kpi{background:var(--espresso-2);padding:22px 22px 20px}
+.d-kpi b{display:block;font-family:var(--f-disp);font-size:2.4rem;letter-spacing:-.03em;line-height:1}
+.d-kpi b span{color:var(--brass)}
+.d-kpi .lab{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.d-kpi em{font-style:normal;font-size:.78rem;color:var(--d-ok);display:block;margin-top:6px}
+
+.d-split{display:grid;grid-template-columns:1.35fr .65fr;gap:20px}
+.d-panel{border:1px solid var(--d-line);background:var(--espresso-2);border-radius:14px;padding:24px;margin-bottom:20px}
+.d-panel h3{font-size:1.2rem;margin-bottom:6px}
+.d-panel .ph{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+
+.d-bars{display:flex;flex-direction:column;gap:15px}
+.d-bar-row{display:grid;grid-template-columns:150px 1fr 62px;gap:12px;align-items:center;font-size:.86rem}
+.d-track{height:8px;background:var(--espresso-3);border-radius:99px;overflow:hidden}
+.d-fill{height:100%;border-radius:99px;background:var(--brass);transition:width .9s var(--ease)}
+.d-bar-row .val{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);text-align:right}
+
+.d-feed{list-style:none;margin:0;padding:0}
+.d-feed li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--d-line);font-size:.88rem;font-weight:300}
+.d-feed li:last-child{border-bottom:0}
+.d-feed time{font-family:var(--f-mono);font-size:.68rem;color:var(--brass);flex:0 0 58px;padding-top:2px;letter-spacing:.04em}
+
+.d-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.d-chip{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:9px 16px;border-radius:40px;border:1px solid var(--d-line);background:none;color:var(--muted);cursor:pointer;transition:.25s}
+.d-chip:hover{color:var(--bone);border-color:var(--brass)}
+.d-chip.on{background:var(--brass);color:var(--espresso);border-color:var(--brass);font-weight:700}
+
+.dash table{width:100%;border-collapse:collapse;font-size:.88rem}
+.dash th{text-align:left;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 12px 0;border-bottom:1px solid var(--d-line);white-space:nowrap}
+.dash td{padding:14px 12px 14px 0;border-bottom:1px solid var(--d-line);vertical-align:middle}
+.dash tr:last-child td{border-bottom:0}
+.d-tblwrap{overflow-x:auto}
+.d-ref{font-family:var(--f-mono);font-size:.8rem;color:var(--brass)}
+
+.d-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;padding:4px 11px;border-radius:99px;background:var(--espresso-3);white-space:nowrap}
+.d-status i{width:6px;height:6px;border-radius:50%;background:var(--muted)}
+.d-status.confirmed i{background:var(--d-ok)}
+.d-status.pending i{background:var(--d-warn)}
+.d-status.new i{background:var(--brass)}
+
+.d-mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:22px}
+.d-mcard{border:1px solid var(--d-line);background:var(--espresso-2);border-radius:14px;padding:22px}
+.d-mcard .tier{font-family:var(--f-disp);font-size:1.3rem}
+.d-mcard .cnt{font-family:var(--f-disp);font-size:2.2rem;letter-spacing:-.03em;margin-top:10px}
+.d-mcard .cnt span{color:var(--brass)}
+.d-mcard .meta{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:8px;display:flex;justify-content:space-between;gap:10px}
+.d-mcard .barwrap{height:5px;background:var(--espresso-3);border-radius:99px;overflow:hidden;margin-top:14px}
+.d-mcard .barwrap i{display:block;height:100%;background:var(--brass);border-radius:99px}
+
+.d-enq{border:1px solid var(--d-line);background:var(--espresso-2);border-radius:14px;padding:22px 24px;margin-bottom:14px}
+.d-enq header{display:flex;justify-content:space-between;gap:14px;align-items:baseline;flex-wrap:wrap}
+.d-enq h4{font-family:var(--f-disp);font-size:1.2rem;margin:0}
+.d-enq .meta{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);letter-spacing:.04em;margin-top:4px}
+.d-enq .tags{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.d-enq .tag{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;background:var(--espresso-3);border-radius:99px;color:var(--muted)}
+.d-enq p.msg{font-size:.9rem;color:var(--bone);font-weight:300;margin:6px 0 14px}
+.d-enq .acts{display:flex;gap:8px;flex-wrap:wrap}
+.d-enq .acts button,.d-enq .acts a{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:40px;border:1px solid var(--d-line);background:none;color:var(--bone);cursor:pointer;text-decoration:none;transition:.25s}
+.d-enq .acts button:hover,.d-enq .acts a:hover{border-color:var(--brass);color:var(--brass)}
+.d-empty{padding:48px 20px;text-align:center;color:var(--muted);border:1px dashed var(--d-line);border-radius:14px;font-size:.9rem;font-weight:300}
+
+@media (max-width:900px){.d-split{grid-template-columns:1fr}}
+@media (max-width:600px){.d-bar-row{grid-template-columns:110px 1fr 54px}.dash .wrap{padding:0 18px}}
+
+/* ======================================================
+   FOUNDING 40  —  pre-opening beta application
+   ====================================================== */
+.founding{padding:120px 0;background:var(--espresso-2);border-top:1px solid var(--espresso-3);position:relative;overflow:hidden}
+.founding .glow{position:absolute;width:620px;height:620px;left:-200px;bottom:-240px;border-radius:50%;background:radial-gradient(circle,rgba(201,164,92,.12),transparent 62%);pointer-events:none}
+.founding .wrap{position:relative;z-index:1}
+.fnd-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(30px,5vw,70px);align-items:start}
+.fnd-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--brass);border-radius:40px;padding:7px 15px 7px 7px;margin-bottom:26px}
+.fnd-badge .pulse{width:9px;height:9px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 0 rgba(201,164,92,.5);animation:fndpulse 2.4s var(--ease) infinite}
+@keyframes fndpulse{0%{box-shadow:0 0 0 0 rgba(201,164,92,.45)}70%{box-shadow:0 0 0 10px rgba(201,164,92,0)}100%{box-shadow:0 0 0 0 rgba(201,164,92,0)}}
+@media (prefers-reduced-motion:reduce){.fnd-badge .pulse{animation:none}}
+.fnd-badge span{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.fnd-lead h2{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1}
+.fnd-lead h2 em{color:var(--brass)}
+.fnd-lead .big4{font-family:var(--f-disp);font-style:italic}
+.fnd-lead p{color:var(--muted);font-weight:300;margin-top:20px;max-width:46ch;font-size:1.02rem}
+.fnd-lead p.free{color:var(--bone);font-weight:350;border-left:2px solid var(--brass);padding-left:16px;margin-top:24px}
+
+/* progress */
+.fnd-prog{margin-top:34px;max-width:420px}
+.fnd-prog .nums{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fnd-prog .nums b{font-family:var(--f-disp);font-size:1.9rem;color:var(--brass);letter-spacing:-.02em}
+.fnd-prog .track{height:8px;background:var(--espresso-3);border-radius:99px;overflow:hidden;margin-top:12px}
+.fnd-prog .track i{display:block;height:100%;background:var(--brass);border-radius:99px;transition:width 1s var(--ease)}
+
+/* perks */
+.fnd-perks{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:38px}
+.fnd-perk{border:1px solid var(--espresso-3);border-radius:12px;padding:18px 16px;transition:border-color .3s,transform .3s var(--ease)}
+.fnd-perk:hover{border-color:var(--brass);transform:translateY(-3px)}
+.fnd-perk .ic{width:30px;height:30px;color:var(--brass);margin-bottom:12px}
+.fnd-perk h4{font-family:var(--f-disp);font-size:1.08rem;font-weight:400}
+.fnd-perk p{font-size:.8rem;color:var(--muted);font-weight:300;margin-top:4px}
+.fnd-policy{margin-top:26px;border:1px solid var(--espresso-3);border-radius:12px;padding:20px 22px;background:rgba(201,164,92,.04)}
+.fnd-policy h4{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;display:flex;align-items:center;gap:9px}
+.fnd-policy h4 svg{width:16px;height:16px}
+.fnd-policy p{font-size:.84rem;color:var(--muted);font-weight:300;line-height:1.65}
+.fnd-policy p b{color:var(--bone);font-weight:500}
+
+/* application card */
+.fnd-card{background:var(--espresso);border:1px solid var(--espresso-3);border-radius:18px;padding:36px;box-shadow:0 30px 70px -45px rgba(0,0,0,.7)}
+.fnd-card .ch{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.fnd-card h3{font-size:1.5rem;margin-bottom:22px}
+.fnd-card .field label{color:var(--muted)}
+.fnd-card input,.fnd-card select,.fnd-card textarea{background:var(--espresso-2);border-color:var(--espresso-3);color:var(--bone)}
+.fnd-card textarea{resize:vertical;min-height:84px}
+.fnd-card .err{color:#e8a06b}
+.fnd-card .field.invalid input,.fnd-card .field.invalid select,.fnd-card .field.invalid textarea{border-color:#e8a06b;background:rgba(232,160,107,.06)}
+.fnd-consent{display:flex;gap:11px;align-items:flex-start;font-size:.84rem;color:var(--muted);font-weight:300;margin:6px 0 20px}
+.fnd-consent input{width:auto;margin-top:3px;flex:none}
+.fnd-card .btn{background:var(--brass);color:var(--espresso);width:100%;justify-content:center;font-weight:700}
+.fnd-card .btn:hover{background:var(--brass-bright)}
+.fnd-foot{font-size:.76rem;color:var(--muted);margin-top:14px;font-weight:300;text-align:center}
+.fnd-success{display:none;text-align:center;padding:26px 6px}
+.fnd-success.show{display:block;animation:fade .5s var(--ease)}
+.fnd-success .ring{width:66px;height:66px;border-radius:50%;border:2px solid var(--brass);display:grid;place-items:center;margin:0 auto 20px}
+.fnd-success h3{font-size:1.5rem;margin-bottom:10px}
+.fnd-success p{color:var(--muted);font-weight:300;max-width:34ch;margin:0 auto 6px;font-size:.92rem}
+.fnd-success .num{font-family:var(--f-disp);font-size:2.6rem;color:var(--brass);letter-spacing:-.02em;margin:16px 0 4px}
+.fnd-success .numlab{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+@media (max-width:860px){.fnd-grid{grid-template-columns:1fr}.fnd-card{padding:28px}}
+
+/* applications tab (dashboard) */
+.d-appcard{border:1px solid var(--d-line);background:var(--espresso-2);border-radius:14px;padding:22px 24px;margin-bottom:14px}
+.d-appcard header{display:flex;justify-content:space-between;gap:14px;align-items:baseline;flex-wrap:wrap}
+.d-appcard h4{font-family:var(--f-disp);font-size:1.18rem;margin:0}
+.d-appcard .meta{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);letter-spacing:.04em;margin-top:4px}
+.d-appcard .tags{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.d-appcard .tag{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;background:var(--espresso-3);border-radius:99px;color:var(--muted)}
+.d-appcard p.msg{font-size:.88rem;color:var(--bone);font-weight:300;margin:4px 0 14px}
+.d-appcard .acts{display:flex;gap:8px;flex-wrap:wrap}
+.d-appcard .acts button,.d-appcard .acts a{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:40px;border:1px solid var(--d-line);background:none;color:var(--bone);cursor:pointer;text-decoration:none;transition:.25s}
+.d-appcard .acts button:hover,.d-appcard .acts a:hover{border-color:var(--brass);color:var(--brass)}
+.d-appbar{border:1px solid var(--d-line);background:var(--espresso-2);border-radius:14px;padding:22px 24px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.d-appbar .lab{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.d-appbar .big{font-family:var(--f-disp);font-size:2rem;letter-spacing:-.02em}
+.d-appbar .big span{color:var(--brass)}
+.d-appbar .track{flex:1;min-width:180px;height:8px;background:var(--espresso-3);border-radius:99px;overflow:hidden}
+.d-appbar .track i{display:block;height:100%;background:var(--brass);border-radius:99px}
+
+/* ======================================================
+   PAGE ROUTING  (each nav tab is its own page)
+   ====================================================== */
+section[data-page][hidden]{display:none!important}
+.chiplet{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--espresso-3);border-radius:40px;padding:7px 13px}
+.cafe .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,64px);align-items:center}
+.cafe img{width:100%;border-radius:16px;border:1px solid var(--espresso-3);aspect-ratio:4/3;object-fit:cover}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:rgba(21,17,12,.12);border:1px solid rgba(21,17,12,.12);border-radius:14px;overflow:hidden;margin-top:10px}
+.svc-card{background:var(--bone-2);padding:30px 26px;transition:background .3s}
+.svc-card:hover{background:#fff}
+.svc-card .n{font-family:var(--f-mono);font-size:.72rem;color:#9a7b39;letter-spacing:.1em}
+.svc-card h3{font-size:1.22rem;margin:14px 0 8px}
+.svc-card p{font-size:.9rem;color:var(--muted-dark);font-weight:300}
+.svc-who{margin-top:26px;font-size:.95rem;color:var(--muted-dark);font-weight:300;max-width:70ch}
+.svc-who b{color:var(--espresso);font-weight:500}
+@media(max-width:860px){.cafe .wrap{grid-template-columns:1fr}}
+.nav-links a.active-link{color:var(--brass)}
+.nav-links a.active-link::after{width:100%}
+.drawer a.active-link{color:var(--brass)}
+
+/* ======================================================
+   BUSINESS OS additions (admin + member portal)
+   ====================================================== */
+.dash-gate .gate-field+.gate-field{margin-top:14px}
+.os-alert{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-radius:12px;padding:14px 18px;margin-bottom:14px;font-size:.9rem;font-weight:300}
+.os-alert.red{background:rgba(224,128,100,.1);border:1px solid rgba(224,128,100,.4);color:#f0b89e}
+.os-alert.amber{background:rgba(201,164,92,.08);border:1px solid rgba(201,164,92,.34);color:var(--bone)}
+.os-alert b{font-weight:600;color:var(--bone)}
+.os-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.os-btn{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:9px 15px;border-radius:40px;border:1px solid var(--d-line);background:none;color:var(--bone);cursor:pointer;transition:.25s}
+.os-btn:hover{border-color:var(--brass);color:var(--brass)}
+.os-btn.brass{background:var(--brass);color:var(--espresso);border-color:var(--brass);font-weight:700}
+.os-btn:disabled{opacity:.4;cursor:not-allowed;border-color:var(--d-line);color:var(--muted)}
+.floor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:4px}
+.floor-cell{text-align:left;border:1px solid var(--espresso-3);border-left-width:3px;border-radius:10px;padding:14px;cursor:pointer;transition:.2s;background:var(--espresso)}
+.floor-cell:hover{border-color:var(--brass)}
+.floor-cell.fc-available{border-left-color:var(--d-ok)}
+.floor-cell.fc-reserved{border-left-color:var(--d-warn)}
+.floor-cell.fc-occupied{border-left-color:var(--brass)}
+.floor-cell .fc-id{font-family:var(--f-mono);font-size:.76rem;color:var(--bone)}
+.floor-cell .fc-t{font-size:.72rem;color:var(--muted);margin-top:2px}
+.floor-cell .fc-s{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;margin-top:10px;display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+.floor-cell .fc-s i{width:7px;height:7px;border-radius:50%}
+.floor-cell .fc-s.fc-available i{background:var(--d-ok)}
+.floor-cell .fc-s.fc-reserved i{background:var(--d-warn)}
+.floor-cell .fc-s.fc-occupied i{background:var(--brass)}
+.dash td .os-btn{padding:6px 11px}
+.p-head{border:1px solid var(--d-line);background:linear-gradient(180deg,rgba(201,164,92,.08),var(--espresso-2));border-radius:16px;padding:26px;margin-bottom:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.p-head .tier{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.p-head h3{font-size:1.7rem;margin:6px 0}
+.p-pts{text-align:right;min-width:200px}
+.p-pts .big{font-family:var(--f-disp);font-size:2.2rem;color:var(--brass);letter-spacing:-.02em;line-height:1}
+.p-pts .sub{font-family:var(--f-mono);font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.p-prog{height:6px;background:var(--espresso-3);border-radius:99px;overflow:hidden;margin-top:12px}
+.p-prog i{display:block;height:100%;background:var(--brass);border-radius:99px}
+.rwd{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.rwd-card{border:1px solid var(--d-line);background:var(--espresso-2);border-radius:12px;padding:18px}
+.rwd-card h4{font-size:1.02rem;font-family:var(--f-disp);font-weight:400}
+.rwd-card .cost{font-family:var(--f-mono);font-size:.72rem;color:var(--brass);margin:8px 0 12px}
+.os-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.os-form .full{grid-column:1/-1}
+.os-form label{display:block;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.os-form input,.os-form select,.os-form textarea{width:100%;background:var(--espresso);border:1px solid var(--d-line);border-radius:9px;color:var(--bone);padding:11px 12px;font-family:var(--f-body);font-size:.9rem}
+.os-form input:focus,.os-form select:focus,.os-form textarea:focus{outline:none;border-color:var(--brass)}
+@media(max-width:600px){.os-form{grid-template-columns:1fr}.p-pts{text-align:left}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#/" class="brand"><span class="four">4</span><b>orth</b><span class="mono">Space</span></a>
+    <ul class="nav-links">
+      <li><a href="#/idea">The Idea</a></li>
+      <li><a href="#/spaces">Spaces</a></li>
+      <li><a href="#/membership">Membership</a></li>
+      <li><a href="#/founding">Founding 40</a></li>
+      <li><a href="#/reserve">Reserve</a></li>
+      <li><a href="#/contact">Contact</a></li>
+      <li><a href="#" data-portal-open>Member</a></li>
+      <li><a href="#" data-dash-open>Dashboard</a></li>
+    </ul>
+    <a href="#/founding" class="nav-cta">Join the beta</a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<nav class="drawer" id="drawer" aria-hidden="true">
+  <a href="#/idea"><span class="n">01</span>The Idea</a>
+  <a href="#/spaces"><span class="n">02</span>Spaces</a>
+  <a href="#/membership"><span class="n">03</span>Membership</a>
+  <a href="#/founding"><span class="n">04</span>Founding 40</a>
+  <a href="#/reserve"><span class="n">05</span>Reserve</a>
+  <a href="#/contact"><span class="n">06</span>Contact</a>
+  <a href="#" data-portal-open><span class="n">07</span>Member</a>
+  <a href="#" data-dash-open><span class="n">08</span>Dashboard</a>
+</nav>
+
+<span id="top"></span>
+
+<!-- HERO -->
+<section class="hero" data-page="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="wrap">
+    <div class="hero-tag reveal"><span class="dot"></span><span>Guzape · Abuja · Now in pre-opening</span></div>
+    <h1 class="reveal">
+      <span class="ln">Beyond home.</span>
+      <span class="ln">Beyond work.</span>
+      <span class="ln"><i>The fourth space.</i></span>
+    </h1>
+    <p class="hero-sub reveal">Abuja has a third place for everyone. 4orth is the one reserved for the few — a members' club and creative workspace built for people whose ambition needs somewhere to live.</p>
+    <div class="hero-actions reveal">
+      <a href="#/reserve" class="btn btn-primary">Reserve a space →</a>
+      <a href="#/membership" class="btn btn-ghost">View membership</a>
+    </div>
+    <div class="hero-meta reveal">
+      <div><div class="k">01</div><div class="l">Floor in Guzape, Abuja</div></div>
+      <div><div class="k">40</div><div class="l">Founding charter seats</div></div>
+      <div><div class="k">Soon</div><div class="l">Doors opening</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOURTH SPACE -->
+<section class="fourth" id="fourth" data-page="idea" hidden>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">The idea — 01 / The fourth space</div>
+      <p class="lead">Sociologists named three places that hold a life. We built the <em>fourth</em> — where the work you're proud of actually gets made.</p>
+    </div>
+    <div class="places reveal">
+      <div class="place">
+        <div class="n">First place</div>
+        <h3>Home</h3>
+        <p>Where you rest. Comfortable, but rarely where momentum is found.</p>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="place">
+        <div class="n">Second place</div>
+        <h3>Work</h3>
+        <p>Where you're paid. Structured, scheduled, and shaped by someone else.</p>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="place">
+        <div class="n">Third place</div>
+        <h3>The social</h3>
+        <p>Cafés, clubs, lounges. Welcome, but designed for everyone at once.</p>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="place is4">
+        <div class="n">Fourth place — 4orth</div>
+        <h3>Here</h3>
+        <p>Curated, private, and tuned for output. Where ambition is finally at home.</p>
+        <div class="bar"><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values" id="values" data-page="home">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div>
+        <div class="eyebrow">What sets the room — 02</div>
+        <h2>Excellence is in the <em>details</em> you'll never have to mention.</h2>
+      </div>
+      <p>Every surface, system, and service at 4orth is engineered so that the only thing demanding your attention is the work itself.</p>
+    </div>
+    <div class="vgrid reveal">
+      <div class="vcard">
+        <div class="num">/ 01</div>
+        <h3>Built without compromise</h3>
+        <p>Acoustic-treated rooms, ergonomic furnishing, gigabit fibre with battery backup, and a power supply that never blinks. Infrastructure you'll forget exists because it simply works.</p>
+      </div>
+      <div class="vcard">
+        <div class="num">/ 02</div>
+        <h3>A curated membership</h3>
+        <p>Founders, partners, creatives, and operators — admitted by application. The person at the next desk is a deliberate part of why you came.</p>
+      </div>
+      <div class="vcard">
+        <div class="num">/ 03</div>
+        <h3>Discretion by design</h3>
+        <p>Private suites, soundproof call booths, and a no-photography floor policy. Sensitive work and quiet deals stay exactly that.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats" data-page="home">
+  <div class="wrap">
+    <div class="sgrid reveal">
+      <div class="stat"><div class="num" data-count="1">0</div><div class="lab">Floor, fully serviced</div></div>
+      <div class="stat"><div class="num" data-count="40">0</div><div class="lab">Founding charter seats</div></div>
+      <div class="stat"><div class="num" data-count="7">0</div><div class="lab">Spaces to book</div></div>
+      <div class="stat"><div class="num">Open</div><div class="lab">Rooftop café &amp; walk-ins</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOFTOP CAFÉ -->
+<section class="cafe" data-page="home" style="padding:100px 0;border-top:1px solid var(--espresso-3)">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">The rooftop · open now</div>
+      <h2 style="font-size:clamp(2rem,4.4vw,3.2rem);margin:16px 0 18px;line-height:1.02">The 4orth rooftop is <span class="serif-i" style="color:var(--brass)">open.</span></h2>
+      <p style="color:var(--muted);font-weight:300;max-width:46ch">Escape to the rooftop and enjoy fresh pasta and signature drinks from our in-house café. Walk-ins welcome, no membership required.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 28px">
+        <span class="chiplet">Walk-ins welcome</span><span class="chiplet">Delivery available</span><span class="chiplet">Specialty menu</span>
+      </div>
+      <div style="display:flex;gap:46px;flex-wrap:wrap;font-family:var(--f-mono);font-size:.82rem">
+        <div><div style="color:var(--brass);letter-spacing:.12em;text-transform:uppercase;font-size:.64rem;margin-bottom:7px">Hours</div><div>Mon–Sat 9am–9pm</div><div style="color:var(--muted)">Sun 10am–6pm</div></div>
+        <div><div style="color:var(--brass);letter-spacing:.12em;text-transform:uppercase;font-size:.64rem;margin-bottom:7px">Find us</div><div>Rooftop, 4orth HQ</div><div style="color:var(--muted)">Guzape, Abuja</div></div>
+      </div>
+      <a href="#/reserve" class="btn btn-primary" style="margin-top:30px">Reserve a space →</a>
+    </div>
+    <div class="reveal"><img src="cafe-image.webp" alt="4orth rooftop café" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="values" data-page="home" style="background:var(--bone-2)">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div>
+        <div class="eyebrow" style="color:#9a7b39">More than a space</div>
+        <h2>A full-service <em>partner.</em></h2>
+      </div>
+      <p>4orth is a creative social impact space where impact, creativity and community intersect. From impact experiences and CSR programmes to branding, digital services and training, we bring a wide network of expertise together, so you don't have to look elsewhere.</p>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card"><div class="n">/ 01</div><h3>Impact &amp; CSR</h3><p>Impact experiences and CSR programmes designed to build stronger relationships with the communities you serve.</p></div>
+      <div class="svc-card"><div class="n">/ 02</div><h3>Branding &amp; merch</h3><p>Brand identity, campaigns and branded merchandise, produced through our creative network.</p></div>
+      <div class="svc-card"><div class="n">/ 03</div><h3>Digital &amp; websites</h3><p>Websites and digital products, built and launched by the Megasis team behind 4orth.</p></div>
+      <div class="svc-card"><div class="n">/ 04</div><h3>Training &amp; workshops</h3><p>Hands-on creative workshops every month, plus training days designed and delivered for your team.</p></div>
+    </div>
+    <p class="svc-who reveal"><b>Who we work with:</b> financial institutions, global brands, foundations, government agencies, educational institutions, and purpose-driven organisations looking to create lasting change.</p>
+  </div>
+</section>
+
+<!-- SPACES -->
+<section class="spaces" id="spaces" data-page="spaces" hidden>
+  <div class="wrap">
+    <div class="shead reveal">
+      <div>
+        <div class="eyebrow">The spaces — 03</div>
+        <h2>The right space, for <em>whatever you need.</em></h2>
+      </div>
+      <p>Every space is open to members and non-members alike. Book by the hour, the half day, or the full day. Filter by what today actually needs.</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="filter active" data-f="all">All spaces</button>
+      <button class="filter" data-f="private">Private</button>
+      <button class="filter" data-f="meeting">Meeting</button>
+      <button class="filter" data-f="creative">Creative</button>
+      <button class="filter" data-f="flexible">Flexible</button>
+    </div>
+    <div class="sp-grid reveal" id="spGrid">
+      <!-- cards injected -->
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIPS -->
+<section class="members" id="members" data-page="membership" hidden>
+  <div class="wrap">
+    <div class="shead reveal">
+      <div>
+        <div class="eyebrow">Membership — 04</div>
+        <h2>Choose how you <em>belong.</em></h2>
+      </div>
+      <div>
+        <p style="margin-bottom:18px">Every tier includes fibre with backup power, a serene floor, printing and member events. Access hours are confirmed at opening. Commit annually and keep two months.</p>
+        <div class="toggle" id="billing">
+          <button class="on" data-b="monthly">Monthly</button>
+          <button data-b="annual">Annual</button>
+          <span class="save">Save 16%</span>
+        </div>
+      </div>
+    </div>
+    <div class="mgrid reveal">
+      <div class="plan">
+        <div class="pname">Resident</div>
+        <div class="pdesc">A flexible hot desk and full club access for the independent operator.</div>
+        <div class="price"><span class="cur">₦</span><span class="amt" data-m="45000" data-a="37500">45,000</span><span class="per">/ month</span></div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Any open hot desk, first come</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>5 hrs of meeting room / month</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Lounge, café &amp; events access</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Printing &amp; mail handling</li>
+        </ul>
+        <a href="#/reserve" class="btn">Apply as Resident</a>
+      </div>
+      <div class="plan feat">
+        <div class="badge">Most chosen</div>
+        <div class="pname">Signature</div>
+        <div class="pdesc">A desk that's always yours, with a guest pass and priority on rooms.</div>
+        <div class="price"><span class="cur">₦</span><span class="amt" data-m="85000" data-a="70800">85,000</span><span class="per">/ month</span></div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Dedicated desk &amp; lockable storage</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>15 hrs of meeting room / month</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>2 guest day-passes / month</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Business address &amp; call answering</li>
+        </ul>
+        <a href="#/reserve" class="btn btn-primary">Apply as Signature</a>
+      </div>
+      <div class="plan">
+        <div class="pname">Executive</div>
+        <div class="pdesc">A private office or suite for you and the team, fully serviced.</div>
+        <div class="price"><span class="cur">₦</span><span class="amt" data-m="250000" data-a="208000">250,000</span><span class="per">/ month</span></div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Private lockable office (up to 4)</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>40 hrs of meeting room / month</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Dedicated concierge &amp; reception</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7.5" stroke="#C9A45C" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>Branded signage &amp; priority booking</li>
+        </ul>
+        <a href="#/reserve" class="btn">Apply as Executive</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDING 40 — pre-opening beta -->
+<section class="founding" id="founding" data-page="founding" hidden>
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="fnd-grid">
+      <!-- left: story -->
+      <div class="fnd-lead reveal">
+        <div class="fnd-badge"><span class="pulse"></span><span>Pre-opening · Charter intake</span></div>
+        <h2>The <em>Founding <span class="big4">40</span></em></h2>
+        <p>Before we open the doors to the public, we're letting in forty people to hot desk with us, shape the space, and tell us what works. Charter members of the fourth space, here from day one.</p>
+        <p class="free">Hot desking is free while we're in beta — no fee, no card for your charter seat. Drinks are the one thing you pay for right now. All we ask in return is your honest feedback and the occasional "this chair should move here."</p>
+
+        <div class="fnd-prog">
+          <div class="nums"><span>Charter seats claimed</span><span><b id="fndCount">27</b> / 40</span></div>
+          <div class="track"><i id="fndBar" style="width:67.5%"></i></div>
+        </div>
+
+        <div class="fnd-perks">
+          <div class="fnd-perk">
+            <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 12.5a10 10 0 0114 0M8 15.5a6 6 0 018 0M12 18.5h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <h4>High-speed wifi</h4><p>Fibre with battery backup. It never blinks.</p>
+          </div>
+          <div class="fnd-perk">
+            <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M6 8h9v5a4.5 4.5 0 01-9 0V8zM15 9h2.5a2 2 0 010 4H15M7 5c0-.8.5-1.2.5-2M11 5c0-.8.5-1.2.5-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h4>Drinks available</h4><p>Barista coffee, tea and cold drinks — pay as you go.</p>
+          </div>
+          <div class="fnd-perk">
+            <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M4 18c3-1 4-4 4-7a4 4 0 118 0c0 3 1 6 4 7M9 18h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h4>Serene by design</h4><p>Quiet, light-filled rooms built for deep work.</p>
+          </div>
+          <div class="fnd-perk">
+            <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M12 4c4 0 7 2.5 7 6 0 2-1.5 3-3 3-1 0-1.6-.5-2.3-1A3 3 0 0012 12a3 3 0 00-1.7.9c-.7.6-1.3 1.1-2.3 1.1-1.5 0-3-1-3-3 0-3.5 3-6 7-6zM9 20l1.5-3M15 20l-1.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h4>Snacks for sale</h4><p>A stocked pantry for the 3pm dip. Pay as you go.</p>
+          </div>
+          <div class="fnd-perk">
+            <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M7 9v4M5 11h4M15 10h.01M17.5 12h.01M7 7h7a5 5 0 015 5 3.5 3.5 0 01-6.3 2.1l-.4-.6h-3.6l-.4.6A3.5 3.5 0 012 12a5 5 0 015-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h4>Games</h4><p>A lounge to reset. Table games and more.</p>
+          </div>
+        </div>
+
+        <div class="fnd-policy">
+          <h4><svg viewBox="0 0 24 24" fill="none"><path d="M3 8a2 2 0 012-2h2l1.5-2h7L18 6h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" stroke="currentColor" stroke-width="1.5"/><circle cx="12.5" cy="12.5" r="3.2" stroke="currentColor" stroke-width="1.5"/></svg>Picture &amp; video policy</h4>
+          <p>To protect every member's privacy and focus, filming at 4orth is limited to <b>close-ups</b>. You may photograph or film your own desk and laptop, your drinks, and details of the space and its design. Please don't shoot vlogs, pan across the general work area, or capture other members, their screens or their conversations. If you're unsure, ask the team first.</p>
+        </div>
+      </div>
+
+      <!-- right: application -->
+      <div class="fnd-card reveal">
+        <form id="fndForm" novalidate>
+          <div class="ch">Apply to hot desk</div>
+          <h3>Claim a charter seat</h3>
+          <div class="row2">
+            <div class="field"><label>Full name</label><input type="text" id="fName" data-req placeholder="Your name"><div class="err">Tell us your name.</div></div>
+            <div class="field"><label>Email</label><input type="email" id="fEmail" data-req placeholder="you@email.com"><div class="err">Enter a valid email.</div></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Phone / WhatsApp</label><input type="tel" id="fPhone" data-req placeholder="+234 …"><div class="err">Add a number we can reach you on.</div></div>
+            <div class="field"><label>What do you do?</label><input type="text" id="fWork" data-req placeholder="e.g. Designer, founder, writer"><div class="err">Tell us what you do.</div></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Days a week you'd come</label>
+              <select id="fDays">
+                <option>1–2 days</option><option>3–4 days</option><option>Most days</option><option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field"><label>Preferred start</label>
+              <select id="fStart">
+                <option>As soon as you open</option><option>Within two weeks</option><option>Within a month</option><option>Just exploring</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>What are you working on? <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-family:var(--f-body)">(and why you want in)</span></label>
+            <textarea id="fWhy" data-req placeholder="A line or two — the kind of work you'd bring into the space."></textarea><div class="err">Give us a sentence or two.</div>
+          </div>
+          <label class="fnd-consent">
+            <input type="checkbox" id="fConsent" data-check>
+            <span>I'd like a charter seat and I'm happy for 4orth to contact me about the beta.</span>
+          </label>
+          <div class="err" id="fConsentErr" style="display:none;margin:-14px 0 14px;color:#e8a06b;font-family:var(--f-mono);font-size:.74rem">Please tick to continue.</div>
+          <label class="fnd-consent">
+            <input type="checkbox" id="fPics" data-check>
+            <span>I've read and agree to the picture &amp; video policy above.</span>
+          </label>
+          <div class="err" id="fPicsErr" style="display:none;margin:-14px 0 16px;color:#e8a06b;font-family:var(--f-mono);font-size:.74rem">Please agree to the picture policy to continue.</div>
+          <button type="submit" class="btn">Apply for the Founding 40</button>
+          <p class="fnd-foot">Charter seats are limited to forty. We reply to every applicant, usually within two days.</p>
+        </form>
+
+        <div class="fnd-success" id="fndSuccess">
+          <div class="ring"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14.5l5 5 9-11" stroke="#C9A45C" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+          <h3>You're on the list</h3>
+          <div class="num" id="fndId">4F-0028</div>
+          <div class="numlab">Your Founding member ID</div>
+          <p id="fndSeatLine" style="margin-top:12px;font-family:var(--f-mono);font-size:.8rem;letter-spacing:.06em;color:var(--brass)">Charter seat #28 of 40</p>
+          <p style="margin-top:14px">Keep this ID. You'll use it to check in, and to sign in to your member portal once we open. We'll email you your start date and what to bring. Welcome to the fourth space.</p>
+          <button class="btn btn-ghost" id="fndAgain" style="width:auto;margin-top:22px">Apply for someone else</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking" id="booking" data-page="reserve" hidden>
+  <div class="wrap">
+    <div class="shead reveal">
+      <div>
+        <div class="eyebrow">Reserve — 05</div>
+        <h2>Begin your <em>residency.</em></h2>
+      </div>
+      <p>Choose a space and we'll cost it instantly. Our concierge confirms within one business day.</p>
+    </div>
+    <div class="bk-wrap reveal">
+      <div class="bk-form">
+        <div class="bk-tabs" role="tablist">
+          <button class="bk-tab on" data-pane="work" role="tab">Workspace</button>
+          <button class="bk-tab" data-pane="room" role="tab">Meeting room</button>
+          <button class="bk-tab" data-pane="tour" role="tab">Book a tour</button>
+        </div>
+
+        <!-- live form -->
+        <form id="bkForm" novalidate>
+          <!-- WORKSPACE -->
+          <div class="bk-pane on" data-pane="work">
+            <div class="row2">
+              <div class="field"><label>Workspace type</label>
+                <select id="wType" data-price>
+                  <option value="hot|8000|32000|45000">Hot desk</option>
+                  <option value="ded|12000|50000|85000">Dedicated desk</option>
+                  <option value="off|30000|120000|250000">Private office</option>
+                  <option value="suite|75000|320000|650000">Executive suite</option>
+                </select>
+              </div>
+              <div class="field"><label>Duration</label>
+                <select id="wDur" data-price>
+                  <option value="day|1">Day pass</option>
+                  <option value="week|2">Weekly</option>
+                  <option value="month|3" selected>Monthly</option>
+                </select>
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field"><label>Start date</label>
+                <input type="date" id="wDate" data-req><div class="err">Pick a start date.</div>
+              </div>
+              <div class="field"><label>How many people</label>
+                <select id="wQty" data-price>
+                  <option value="1">1 person</option><option value="2">2 people</option>
+                  <option value="3">3 people</option><option value="4">4 people</option>
+                  <option value="5">5+ people</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- MEETING ROOM -->
+          <div class="bk-pane" data-pane="room">
+            <div class="row2">
+              <div class="field"><label>Room duration</label>
+                <select id="rDur" data-price>
+                  <option value="1h|15000">1 hour</option>
+                  <option value="2h|28000">2 hours</option>
+                  <option value="4h|52000" selected>4 hours</option>
+                  <option value="day|120000">Full day</option>
+                </select>
+              </div>
+              <div class="field"><label>Capacity</label>
+                <select id="rCap" data-price>
+                  <option value="2–4|1">2–4 people</option>
+                  <option value="5–8|1.6">5–8 people</option>
+                  <option value="9–12|2.4">9–12 people</option>
+                  <option value="13+|3.5">13+ (boardroom)</option>
+                </select>
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field"><label>Date</label>
+                <input type="date" id="rDate" data-req><div class="err">Pick a date.</div>
+              </div>
+              <div class="field"><label>Start time</label>
+                <input type="time" id="rTime" data-req value="09:00"><div class="err">Pick a time.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOUR -->
+          <div class="bk-pane" data-pane="tour">
+            <div class="row2">
+              <div class="field"><label>Preferred date</label>
+                <input type="date" id="tDate" data-req><div class="err">Pick a date.</div>
+              </div>
+              <div class="field"><label>Preferred time</label>
+                <select id="tTime">
+                  <option>Morning (9–12)</option><option>Afternoon (12–4)</option><option>Evening (4–7)</option>
+                </select>
+              </div>
+            </div>
+            <div class="field"><label>What are you most interested in?</label>
+              <select id="tInterest">
+                <option>Resident membership</option><option>Signature membership</option>
+                <option>Executive office / suite</option><option>Meeting &amp; event hire</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- shared contact -->
+          <div class="row2">
+            <div class="field"><label>Full name</label>
+              <input type="text" id="bName" data-req placeholder="Your name"><div class="err">Tell us your name.</div>
+            </div>
+            <div class="field"><label>Email</label>
+              <input type="email" id="bEmail" data-req placeholder="you@company.com"><div class="err">Enter a valid email.</div>
+            </div>
+          </div>
+          <button type="submit" class="btn" id="bkSubmit">Confirm reservation</button>
+        </form>
+      </div>
+
+      <!-- SUMMARY -->
+      <aside class="bk-summary">
+        <div id="sumLive">
+          <div class="eyebrow">Your reservation</div>
+          <h3 id="sumTitle">Hot desk · Monthly</h3>
+          <div id="sumLines">
+            <div class="sum-line"><span class="k">Space</span><span class="v" id="lSpace">Hot desk</span></div>
+            <div class="sum-line"><span class="k">Commitment</span><span class="v" id="lDur">Monthly</span></div>
+            <div class="sum-line"><span class="k">People</span><span class="v" id="lQty">1 person</span></div>
+            <div class="sum-line"><span class="k">Rate</span><span class="v" id="lRate">₦45,000 / mo</span></div>
+          </div>
+          <div class="sum-total">
+            <div class="row"><span class="lab">Estimated total</span><span class="big" id="sumTotal">₦45,000</span></div>
+            <p class="sum-note" id="sumNote">Billed monthly. No booking fee — your concierge confirms availability before any charge.</p>
+          </div>
+        </div>
+        <div class="bk-success" id="bkSuccess" style="color:var(--bone)">
+          <div class="ring"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M6 13.5l5 5 9-11" stroke="#C9A45C" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+          <h3 style="color:var(--bone)">Reservation received</h3>
+          <p style="color:var(--muted)">Thank you — your concierge will confirm availability and next steps by email within one business day.</p>
+          <div class="ref" id="bkRef">REF · 4S-000000</div>
+          <button class="btn btn-ghost" id="bkAgain">Make another</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" data-page="home">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div>
+        <div class="eyebrow">In members' words — 06</div>
+        <h2>Exceptional by every <em>measure.</em></h2>
+      </div>
+      <p>Why partners, founders, and creatives keep their desk at 4orth.</p>
+    </div>
+    <div class="tgrid reveal">
+      <div class="tcard">
+        <p class="q">4orth redefined what a workspace can be. The caliber of fellow members and the seamless service create an environment where excellence isn't expected — it's inevitable.</p>
+        <div class="tperson"><div class="av">AO</div><div><div class="nm">Dr. Adaora Okafor</div><div class="ro">Senior Partner, Okafor &amp; Associates</div></div></div>
+      </div>
+      <div class="tcard">
+        <p class="q">We closed our seed round in the boardroom on the fourth floor. The discretion is real, and the address opens doors before you've said a word.</p>
+        <div class="tperson"><div class="av">TE</div><div><div class="nm">Tunde Eyiowuawi</div><div class="ro">Founder, Lumen Fintech</div></div></div>
+      </div>
+      <div class="tcard">
+        <p class="q">As a studio, light and quiet are everything. 4orth gave us both, plus a community that turned into half our client list. I haven't worked anywhere else since.</p>
+        <div class="tperson"><div class="av">NK</div><div><div class="nm">Nkechi Bello</div><div class="ro">Creative Director, Form &amp; Field</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq" data-page="reserve" hidden>
+  <div class="wrap">
+    <div class="shead reveal" style="justify-content:center;text-align:center">
+      <div>
+        <div class="eyebrow">Good to know — 07</div>
+        <h2>Questions, answered.</h2>
+      </div>
+    </div>
+    <div class="faq-list reveal">
+      <div class="qa">
+        <button aria-expanded="false"><span>Is 4orth open to anyone, or is it application-only?</span><span class="ic"></span></button>
+        <div class="ans"><p>Day passes and meeting rooms are open to all by reservation. Resident, Signature, and Executive memberships are by application — a short conversation that keeps the community considered and the rooms quiet.</p></div>
+      </div>
+      <div class="qa">
+        <button aria-expanded="false"><span>What's actually included in a membership?</span><span class="ic"></span></button>
+        <div class="ans"><p>Every tier includes secure access, gigabit fibre with backup power, printing, a monthly allocation of meeting-room hours, and access to member events. Signature and Executive add a business address, call handling, and dedicated space. We're still in pre-opening, so set access hours will be confirmed before we open.</p></div>
+      </div>
+      <div class="qa">
+        <button aria-expanded="false"><span>Can I bring guests or clients?</span><span class="ic"></span></button>
+        <div class="ans"><p>Yes. Signature and Executive members receive monthly guest passes, and any member can book private meeting rooms for client sessions. The ground-floor lounge is designed precisely for those first impressions.</p></div>
+      </div>
+      <div class="qa">
+        <button aria-expanded="false"><span>Where exactly is 4orth, and is parking available?</span><span class="ic"></span></button>
+        <div class="ans"><p>We're in Guzape, Abuja, with secure on-site parking for members and validated guest parking. The full address is shared on confirmation of your tour.</p></div>
+      </div>
+      <div class="qa">
+        <button aria-expanded="false"><span>How do I cancel or change a plan?</span><span class="ic"></span></button>
+        <div class="ans"><p>Monthly plans roll month to month and can be paused or cancelled with 14 days' notice. Annual plans can be transferred or upgraded at any time — speak to your concierge and we'll handle the rest.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact" data-page="contact" hidden>
+  <div class="wrap">
+    <div class="ct-grid">
+      <div class="ct-info reveal">
+        <div class="eyebrow">Contact — 08</div>
+        <h2 style="margin-top:14px">Come see the <em>fourth space.</em></h2>
+        <p>Tell us a little about what you're building. We'll arrange a private tour at a time that suits you.</p>
+        <div class="ct-list">
+          <div class="ct-item">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div><div class="lab">Visit</div><div class="val">Rooftop, 4orth HQ · Guzape, Abuja</div><div class="val" style="font-size:.85rem;color:var(--muted)">Abuja · London</div></div>
+          </div>
+          <div class="ct-item">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-3 2c1 3 3 5 6 6l2-3 5 2v4c0 1-1 2-2 2C12 24 0 12 0 4 0 3 1 2 2 2" stroke="currentColor" stroke-width="1.6" transform="translate(2 0)"/></svg></div>
+            <div><div class="lab">Call / WhatsApp</div><div class="val">+234 911 222 2501</div></div>
+          </div>
+          <div class="ct-item">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <div><div class="lab">Email</div><div class="val">contact@4orthspace.com</div></div>
+          </div>
+          <div class="ct-item">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <div><div class="lab">Opening hours</div><div class="val">Mon–Sat 9:00am–9:00pm</div><div class="val" style="font-size:.85rem;color:var(--muted)">Sun 10:00am–6:00pm</div></div>
+          </div>
+        </div>
+      </div>
+      <form class="ct-form reveal" id="ctForm" novalidate>
+        <div class="row2">
+          <div class="field"><label>Name</label><input type="text" id="cName" data-req placeholder="Full name"><div class="err">Tell us your name.</div></div>
+          <div class="field"><label>Email</label><input type="email" id="cEmail" data-req placeholder="you@company.com"><div class="err">Enter a valid email.</div></div>
+        </div>
+        <div class="field"><label>I'm interested in</label>
+          <select id="cTopic"><option>A private tour</option><option>Membership</option><option>Meeting / event hire</option><option>Partnerships</option></select>
+        </div>
+        <div class="field"><label>Message</label><textarea id="cMsg" data-req placeholder="A line about what you're working on…"></textarea><div class="err">Add a short message.</div></div>
+        <button type="submit" class="btn">Send message</button>
+        <div class="ct-ok" id="ctOk">Thank you — your message is in. We'll be in touch within one business day.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="brand"><span class="four">4</span><b>orth</b><span class="mono">Space</span></div>
+        <p>Abuja's fourth space — a members' club and creative workspace where founders, partners, and makers do the work they're proud of.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Explore</h4>
+        <a href="#/idea">The idea</a><a href="#/spaces">Spaces</a><a href="#/membership">Membership</a><a href="#/reserve">Reserve</a><a href="#" data-dash-open>Team dashboard</a><a href="#" data-portal-open>Member portal</a>
+      </div>
+      <div class="ft-col">
+        <h4>Spaces</h4>
+        <a href="#/spaces">Private offices</a><a href="#/spaces">Dedicated desks</a><a href="#/spaces">Meeting rooms</a><a href="#/spaces">Event hire</a>
+      </div>
+      <div class="ft-col">
+        <h4>Visit</h4>
+        <a href="#/contact">Guzape, Abuja · London</a><a href="tel:+2349112222501">+234 911 222 2501</a><a href="mailto:contact@4orthspace.com">contact@4orthspace.com</a>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p>© <span id="yr"></span> 4orth Space. Where ambition is at home.</p>
+      <div class="ft-social">
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 014 0v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+        <a href="#" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="1.6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== OPERATIONS DASHBOARD ==================== -->
+<!-- ==================== ADMIN — BUSINESS OS ==================== -->
+<div class="dash" id="dash" role="dialog" aria-modal="true" aria-label="4orth admin dashboard">
+  <div class="dash-bar">
+    <div class="wrap in">
+      <div class="brand"><span class="four">4</span><b>orth</b><span class="mono">Admin OS</span></div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span class="dash-live" id="dashLiveTag" hidden><i></i>Live</span>
+        <button class="dash-close" id="dashReset" hidden>Reset demo data</button>
+        <button class="dash-close" id="dashClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="dash-gate" id="dashGate">
+      <div class="eyebrow" style="display:flex">Staff access</div>
+      <h2>Admin dashboard</h2>
+      <p>The command centre for 4orth Space, Guzape — spaces, bookings, members, loyalty and tasks.</p>
+      <div class="gate-field"><label for="dashUser">Username</label><input type="text" id="dashUser" autocomplete="username" placeholder="admin"></div>
+      <div class="gate-field"><label for="dashPass">Password</label><input type="password" id="dashPass" autocomplete="current-password" placeholder="••••"><div class="gate-err" id="dashErr">That username or password isn't right.</div></div>
+      <button class="btn" id="dashGo">Sign in</button>
+      <p class="dash-hint">Demo sign-in: <code>admin</code> / <code>4orth</code> — change <code>ADMIN</code> in the script before deploying.</p>
+    </div>
+    <div id="dashApp" hidden>
+      <div class="dash-head">
+        <div><h2 id="dashDeptTitle">Executive overview</h2><div class="sub" id="dashDate"></div></div>
+        <button class="dash-close" id="dashOut">Sign out</button>
+      </div>
+      <div class="dash-note">Prototype data lives in your browser (localStorage), seeded on first load. Bookings, Founding 40 applications and enquiries from the public site land here automatically. Use “Reset demo data” to restore the sample set.</div>
+      <div class="dash-tabs" id="dashTabs">
+        <button class="dash-tab on" data-tab="overview">Overview</button>
+        <button class="dash-tab" data-tab="spaces">Spaces</button>
+        <button class="dash-tab" data-tab="bookings">Bookings <span class="cnt" id="bkCount"></span></button>
+        <button class="dash-tab" data-tab="enquiries">Enquiries <span class="cnt" id="enqCount"></span></button>
+        <button class="dash-tab" data-tab="members">Members</button>
+        <button class="dash-tab" data-tab="tasks">Tasks <span class="cnt" id="taskCount"></span></button>
+      </div>
+      <div class="dash-view" id="dv-overview"></div>
+      <div class="dash-view" id="dv-spaces" hidden></div>
+      <div class="dash-view" id="dv-bookings" hidden></div>
+      <div class="dash-view" id="dv-enquiries" hidden></div>
+      <div class="dash-view" id="dv-members" hidden></div>
+      <div class="dash-view" id="dv-tasks" hidden></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MEMBER PORTAL ==================== -->
+<div class="dash" id="portal" role="dialog" aria-modal="true" aria-label="4orth member portal">
+  <div class="dash-bar">
+    <div class="wrap in">
+      <div class="brand"><span class="four">4</span><b>orth</b><span class="mono">Member</span></div>
+      <button class="dash-close" id="portalClose">Close ✕</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="dash-gate" id="portalGate">
+      <div class="eyebrow" style="display:flex">Member sign-in</div>
+      <h2>Your 4orth</h2>
+      <p>Bookings, points, invoices and member events, all in one place.</p>
+      <div class="gate-field"><label for="portalId">Name or member ID</label><input type="text" id="portalId" placeholder="e.g. Amara Okonkwo or 4M-0001"></div>
+      <div class="gate-field"><label for="portalPin">PIN</label><input type="password" id="portalPin" placeholder="0000"><div class="gate-err" id="portalErr">We couldn't match that member and PIN.</div></div>
+      <button class="btn" id="portalGo">Sign in</button>
+      <p class="dash-hint">Demo: any seeded member name or ID, PIN <code>0000</code>. Try <code>Amara Okonkwo</code>.</p>
+    </div>
+    <div id="portalApp" hidden>
+      <div id="portalHeader"></div>
+      <div class="dash-tabs" id="portalTabs">
+        <button class="dash-tab on" data-ptab="overview">Overview</button>
+        <button class="dash-tab" data-ptab="workspace">My workspace</button>
+        <button class="dash-tab" data-ptab="bookings">Bookings</button>
+        <button class="dash-tab" data-ptab="invoices">Invoices</button>
+        <button class="dash-tab" data-ptab="rewards">Rewards</button>
+        <button class="dash-tab" data-ptab="events">Events</button>
+        <button class="dash-tab" data-ptab="documents">Documents</button>
+        <button class="dash-tab" data-ptab="profile">Profile</button>
+      </div>
+      <div class="dash-view" id="pv-overview"></div>
+      <div class="dash-view" id="pv-workspace" hidden></div>
+      <div class="dash-view" id="pv-bookings" hidden></div>
+      <div class="dash-view" id="pv-invoices" hidden></div>
+      <div class="dash-view" id="pv-rewards" hidden></div>
+      <div class="dash-view" id="pv-events" hidden></div>
+      <div class="dash-view" id="pv-documents" hidden></div>
+      <div class="dash-view" id="pv-profile" hidden></div>
+      <div style="margin-top:28px;display:flex;justify-content:flex-end"><button class="dash-close" id="portalOut">Sign out</button></div>
+    </div>
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="Back to top"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+<script>
+(function(){
+  "use strict";
+  var rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- nav scroll state + back to top ---------- */
+  var hdr=document.getElementById("hdr"), totop=document.getElementById("totop");
+  function onScroll(){
+    var y=window.scrollY;
+    hdr.classList.toggle("scrolled", y>40);
+    totop.classList.toggle("show", y>700);
+  }
+  window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
+  totop.addEventListener("click",function(){window.scrollTo({top:0,behavior:rm?"auto":"smooth"});});
+
+  /* ---------- mobile drawer ---------- */
+  var burger=document.getElementById("burger"), drawer=document.getElementById("drawer");
+  function toggleDrawer(open){
+    burger.classList.toggle("open",open); drawer.classList.toggle("open",open);
+    burger.setAttribute("aria-expanded",open); drawer.setAttribute("aria-hidden",!open);
+    document.body.style.overflow=open?"hidden":"";
+  }
+  burger.addEventListener("click",function(){toggleDrawer(!drawer.classList.contains("open"));});
+  drawer.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){toggleDrawer(false);});});
+
+  /* ---------- reveal on scroll ---------- */
+  var revs=document.querySelectorAll(".reveal");
+  if(rm){revs.forEach(function(r){r.classList.add("in");});}
+  else{
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});
+    },{threshold:.12,rootMargin:"0px 0px -8% 0px"});
+    revs.forEach(function(r){io.observe(r);});
+  }
+
+  /* ---------- count up ---------- */
+  var counted=false;
+  function runCount(){
+    if(counted) return; counted=true;
+    document.querySelectorAll("[data-count]").forEach(function(el){
+      var target=+el.getAttribute("data-count"), suf=el.getAttribute("data-suffix")||"", dur=1500, t0=null;
+      if(rm){el.textContent=target+suf;return;}
+      function step(ts){
+        if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1);
+        var val=Math.floor((1-Math.pow(1-p,3))*target);
+        el.textContent=val+suf;
+        if(p<1)requestAnimationFrame(step); else el.textContent=target+suf;
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  var statSec=document.querySelector(".stats");
+  if(statSec){
+    var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)runCount();});},{threshold:.4});
+    so.observe(statSec);
+  }
+
+  /* ---------- spaces data + render + filter ---------- */
+  var SPACES=[
+    {t:"Flexible Space",c:"flexible",d:"A bright, open, adaptable room for private classes, workshops, training sessions and events. Open to members and non-members alike.",p:"Hourly · Half day · Full day",img:"flex"},
+    {t:"4orth Space (lounge &amp; café)",c:"creative",d:"Exclusive use of the open lounge and café, full days only. Booking closes the space to the public, ideal for brand activations and private events.",p:"Full day only",img:"cafeSpace"},
+    {t:"Conference Room",c:"meeting",d:"A glass-walled meeting room with panoramic views of Abuja, for team sessions, client meetings and strategy days.",p:"Coming soon",img:"meeting"},
+    {t:"Rooftop Café",c:"creative",d:"Fresh pasta and signature drinks from our in-house café. Walk-ins welcome, no membership required.",p:"Open to all",img:"cafe"},
+    {t:"Private Office",c:"private",d:"A fully furnished, lockable office for focused work and confidential meetings.",p:"From ₦250,000<span>/mo</span>",img:"meeting"},
+    {t:"Dedicated Desk",c:"flexible",d:"A desk that's always yours, with lockable storage and a business address.",p:"From ₦85,000<span>/mo</span>",img:"flex"},
+    {t:"Hot Desk",c:"flexible",d:"Drop in and take any open seat. The easiest way into the fourth space.",p:"From ₦8,000<span>/day</span>",img:"cafeSpace"}
+  ];
+  var IMG={
+    cafe:"cafe-image.webp",
+    cafeSpace:"cafe-space.webp",
+    flex:"flexible-room.webp",
+    meeting:"meeting-room.webp"
+  };
+  var CATLBL={private:"Private",meeting:"Meeting",creative:"Creative",flexible:"Flexible"};
+  var grid=document.getElementById("spGrid");
+  grid.innerHTML=SPACES.map(function(s){
+    return '<article class="sp-card" data-c="'+s.c+'">'
+      +'<div class="sp-media"><span class="sp-cat">'+CATLBL[s.c]+'</span>'
+      +'<img loading="lazy" src="'+IMG[s.img]+'" alt="'+s.t.replace(/&amp;/g,"&")+'"></div>'
+      +'<div class="sp-body"><h3>'+s.t+'</h3><p>'+s.d+'</p>'
+      +'<div class="sp-foot"><span class="sp-price">'+s.p.replace(/<span>/g,'<b style="color:var(--brass)"> ').replace(/<\/span>/g,'</b>')+'</span>'
+      +'<a href="#/reserve">Reserve →</a></div></div></article>';
+  }).join("");
+  document.getElementById("filters").addEventListener("click",function(e){
+    var b=e.target.closest(".filter"); if(!b)return;
+    this.querySelectorAll(".filter").forEach(function(f){f.classList.remove("active");});
+    b.classList.add("active");
+    var f=b.getAttribute("data-f");
+    grid.querySelectorAll(".sp-card").forEach(function(c){
+      c.classList.toggle("hide", f!=="all" && c.getAttribute("data-c")!==f);
+    });
+  });
+
+  /* ---------- membership billing toggle ---------- */
+  var billing=document.getElementById("billing");
+  billing.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b)return;
+    this.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+    var annual=b.getAttribute("data-b")==="annual";
+    document.querySelectorAll(".plan .amt").forEach(function(a){
+      var v=+a.getAttribute(annual?"data-a":"data-m");
+      a.style.opacity="0";
+      setTimeout(function(){ a.textContent=v.toLocaleString("en-NG"); a.style.opacity="1"; },120);
+    });
+    document.querySelectorAll(".plan .per").forEach(function(p){p.textContent=annual?"/ mo, billed yearly":"/ month";});
+  });
+
+  /* ---------- booking ---------- */
+  var tabs=document.querySelectorAll(".bk-tab"), panes=document.querySelectorAll(".bk-pane");
+  var activePane="work";
+  tabs.forEach(function(t){
+    t.addEventListener("click",function(){
+      activePane=t.getAttribute("data-pane");
+      tabs.forEach(function(x){x.classList.remove("on");}); t.classList.add("on");
+      panes.forEach(function(p){p.classList.toggle("on",p.getAttribute("data-pane")===activePane);});
+      updateSummary();
+    });
+  });
+  var NGN=function(n){return "₦"+Math.round(n).toLocaleString("en-NG");};
+  var DURLBL={day:"Day pass",week:"Weekly",month:"Monthly"};
+  var RATEUNIT={day:"day",week:"wk",month:"mo"};
+  function updateSummary(){
+    var title=document.getElementById("sumTitle"), lines=document.getElementById("sumLines"),
+        total=document.getElementById("sumTotal"), note=document.getElementById("sumNote");
+    if(activePane==="work"){
+      var tp=document.getElementById("wType"), tpTxt=tp.options[tp.selectedIndex].text,
+          tpv=tp.value.split("|"), // key,day,week,month
+          dur=document.getElementById("wDur").value.split("|"), durKey=dur[0], durIdx=+dur[1],
+          qty=+document.getElementById("wQty").value,
+          rate=+tpv[durIdx];
+      var sub=rate*qty;
+      title.textContent=tpTxt+" · "+DURLBL[durKey];
+      lines.innerHTML=
+        '<div class="sum-line"><span class="k">Space</span><span class="v">'+tpTxt+'</span></div>'
+       +'<div class="sum-line"><span class="k">Commitment</span><span class="v">'+DURLBL[durKey]+'</span></div>'
+       +'<div class="sum-line"><span class="k">People</span><span class="v">'+(qty>=5?"5+ people":qty+(qty>1?" people":" person"))+'</span></div>'
+       +'<div class="sum-line"><span class="k">Rate</span><span class="v">'+NGN(rate)+' / '+RATEUNIT[durKey]+(qty>1?" × "+qty:"")+'</span></div>';
+      total.textContent=NGN(sub);
+      note.textContent=durKey==="month"?"Billed monthly. No booking fee — your concierge confirms availability first."
+        :durKey==="week"?"One week of access. Extend or convert to monthly any time."
+        :"A single day of full access. The best way to try the fourth space.";
+    } else if(activePane==="room"){
+      var rd=document.getElementById("rDur"), rdTxt=rd.options[rd.selectedIndex].text, base=+rd.value.split("|")[1],
+          rc=document.getElementById("rCap"), rcTxt=rc.options[rc.selectedIndex].text, mult=+rc.value.split("|")[1];
+      var sub2=base*mult;
+      title.textContent="Meeting room · "+rdTxt;
+      lines.innerHTML=
+        '<div class="sum-line"><span class="k">Booking</span><span class="v">Meeting room</span></div>'
+       +'<div class="sum-line"><span class="k">Duration</span><span class="v">'+rdTxt+'</span></div>'
+       +'<div class="sum-line"><span class="k">Capacity</span><span class="v">'+rcTxt+'</span></div>'
+       +'<div class="sum-line"><span class="k">Base rate</span><span class="v">'+NGN(base)+(mult>1?" × "+mult:"")+'</span></div>';
+      total.textContent=NGN(sub2);
+      note.textContent="Includes screen, whiteboard, water and barista coffee. Members use included hours first.";
+    } else {
+      title.textContent="Private tour";
+      lines.innerHTML=
+        '<div class="sum-line"><span class="k">Booking</span><span class="v">Guided tour</span></div>'
+       +'<div class="sum-line"><span class="k">Duration</span><span class="v">~30 minutes</span></div>'
+       +'<div class="sum-line"><span class="k">Cost</span><span class="v">Complimentary</span></div>';
+      total.textContent="Free";
+      note.textContent="Walk the floor, meet the team, and see whether 4orth is your fourth space.";
+    }
+  }
+  document.querySelectorAll("[data-price]").forEach(function(el){el.addEventListener("change",updateSummary);});
+  updateSummary();
+
+  /* ---------- validation helpers ---------- */
+  function setInvalid(field,bad){ field.classList.toggle("invalid",bad); }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function validateScope(scope){
+    var ok=true;
+    scope.querySelectorAll("[data-req]").forEach(function(inp){
+      var f=inp.closest(".field"), v=inp.value.trim(), bad=false;
+      if(!v) bad=true;
+      else if(inp.type==="email" && !validEmail(v)) bad=true;
+      setInvalid(f,bad); if(bad)ok=false;
+    });
+    return ok;
+  }
+  // clear error on input
+  document.querySelectorAll("[data-req]").forEach(function(inp){
+    inp.addEventListener("input",function(){ if(inp.closest(".field").classList.contains("invalid")) setInvalid(inp.closest(".field"),false); });
+  });
+
+  /* ---------- booking submit ---------- */
+  var bkForm=document.getElementById("bkForm"), bkSuccess=document.getElementById("bkSuccess"), sumLive=document.getElementById("sumLive");
+  bkForm.addEventListener("submit",function(e){
+    e.preventDefault();
+    var pane=document.querySelector('.bk-pane.on');
+    var scopeOk=validateScope(pane);
+    // shared name/email live in form but outside panes
+    var sharedOk=true;
+    [document.getElementById("bName"),document.getElementById("bEmail")].forEach(function(inp){
+      var f=inp.closest(".field"), v=inp.value.trim(), bad=!v||(inp.type==="email"&&!validEmail(v));
+      setInvalid(f,bad); if(bad)sharedOk=false;
+    });
+    if(!scopeOk||!sharedOk) return;
+    var ref="4S-"+Math.floor(100000+Math.random()*899999);
+    document.getElementById("bkRef").textContent="REF · "+ref;
+    // capture the reservation for the operations dashboard before the form resets
+    var paneKey=activePane, dateVal="";
+    if(paneKey==="work") dateVal=document.getElementById("wDate").value;
+    else if(paneKey==="room") dateVal=document.getElementById("rDate").value+" "+document.getElementById("rTime").value;
+    else dateVal=document.getElementById("tDate").value+" · "+document.getElementById("tTime").value;
+    if(window.OS) window.OS.addBooking({
+      ref:ref,
+      type:paneKey,
+      space:document.getElementById("sumTitle").textContent,
+      date:dateVal,
+      value:document.getElementById("sumTotal").textContent,
+      name:document.getElementById("bName").value.trim(),
+      email:document.getElementById("bEmail").value.trim()
+    });
+    sumLive.style.display="none"; bkSuccess.classList.add("show");
+    bkForm.reset();
+  });
+  document.getElementById("bkAgain").addEventListener("click",function(){
+    bkSuccess.classList.remove("show"); sumLive.style.display="block"; updateSummary();
+  });
+
+  /* ---------- FAQ accordion ---------- */
+  document.querySelectorAll(".qa button").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var qa=btn.parentElement, ans=qa.querySelector(".ans"), open=qa.classList.contains("open");
+      document.querySelectorAll(".qa").forEach(function(o){
+        o.classList.remove("open"); o.querySelector(".ans").style.maxHeight=null; o.querySelector("button").setAttribute("aria-expanded","false");
+      });
+      if(!open){ qa.classList.add("open"); ans.style.maxHeight=ans.scrollHeight+"px"; btn.setAttribute("aria-expanded","true"); }
+    });
+  });
+
+  /* ---------- contact submit ---------- */
+  var ctForm=document.getElementById("ctForm"), ctOk=document.getElementById("ctOk");
+  ctForm.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!validateScope(ctForm)) return;
+    if(window.OS) window.OS.addEnquiry({
+      name:document.getElementById("cName").value.trim(),
+      email:document.getElementById("cEmail").value.trim(),
+      topic:document.getElementById("cTopic").value,
+      message:document.getElementById("cMsg").value.trim()
+    });
+    ctOk.classList.add("show"); ctForm.querySelector("button").textContent="Sent ✓";
+    setTimeout(function(){
+      ctForm.reset(); ctOk.classList.remove("show"); ctForm.querySelector("button").textContent="Send message";
+    },4000);
+  });
+
+  /* ---------- founding 40 application ---------- */
+  var fndForm=document.getElementById("fndForm"), fndSuccess=document.getElementById("fndSuccess");
+  var fndClaimed=27, fndTarget=40;
+  var fConsent=document.getElementById("fConsent"), fConsentErr=document.getElementById("fConsentErr");
+  var fPics=document.getElementById("fPics"), fPicsErr=document.getElementById("fPicsErr");
+  fConsent.addEventListener("change",function(){ if(fConsent.checked) fConsentErr.style.display="none"; });
+  fPics.addEventListener("change",function(){ if(fPics.checked) fPicsErr.style.display="none"; });
+  fndForm.addEventListener("submit",function(e){
+    e.preventDefault();
+    var ok=validateScope(fndForm);
+    if(!fConsent.checked){ fConsentErr.style.display="block"; ok=false; } else { fConsentErr.style.display="none"; }
+    if(!fPics.checked){ fPicsErr.style.display="block"; ok=false; } else { fPicsErr.style.display="none"; }
+    if(!ok){ fndForm.querySelector(".field.invalid")&&fndForm.querySelector(".field.invalid").scrollIntoView({block:"center",behavior:"smooth"}); return; }
+    if(fndClaimed<fndTarget) fndClaimed++;
+    var seat=fndClaimed;
+    var memberId="4F-"+("000"+seat).slice(-4);
+    document.getElementById("fndCount").textContent=fndClaimed;
+    document.getElementById("fndBar").style.width=(fndClaimed/fndTarget*100)+"%";
+    document.getElementById("fndId").textContent=memberId;
+    document.getElementById("fndSeatLine").textContent="Charter seat #"+seat+" of "+fndTarget;
+    if(window.OS) window.OS.addApplication({
+      name:document.getElementById("fName").value.trim(),
+      email:document.getElementById("fEmail").value.trim(),
+      phone:document.getElementById("fPhone").value.trim(),
+      work:document.getElementById("fWork").value.trim(),
+      days:document.getElementById("fDays").value,
+      start:document.getElementById("fStart").value,
+      why:document.getElementById("fWhy").value.trim(),
+      seat:seat, memberId:memberId, picsPolicy:true
+    });
+    fndForm.style.display="none"; fndSuccess.classList.add("show");
+    fndForm.reset();
+  });
+  document.getElementById("fndAgain").addEventListener("click",function(){
+    fndSuccess.classList.remove("show"); fndForm.style.display="block";
+    fndForm.scrollIntoView({block:"center",behavior:"smooth"});
+  });
+
+  /* ---------- page routing (each nav tab = its own page) ---------- */
+  var ROUTES={"":"home","/":"home","/idea":"idea","/spaces":"spaces","/membership":"membership","/founding":"founding","/reserve":"reserve","/contact":"contact"};
+  function currentRoute(){ return ROUTES[location.hash.replace(/^#/,"")]||"home"; }
+  function route(){
+    var r=currentRoute();
+    document.querySelectorAll("section[data-page]").forEach(function(sec){ sec.hidden=(sec.dataset.page!==r); });
+    var want = (r==="home") ? "#/" : "#/"+r;
+    document.querySelectorAll(".nav-links a[href^='#/'], .drawer a[href^='#/']").forEach(function(a){
+      a.classList.toggle("active-link", a.getAttribute("href")===want);
+    });
+    // reveal the content that is now on screen
+    document.querySelectorAll("section[data-page]:not([hidden]) .reveal").forEach(function(el){ el.classList.add("in"); });
+    if(r==="home") runCount();
+    toggleDrawer(false);
+    window.scrollTo({top:0,behavior:"auto"});
+  }
+  window.addEventListener("hashchange",route);
+  route();
+
+  /* ---------- year ---------- */
+  document.getElementById("yr").textContent=new Date().getFullYear();
+})();
+</script>
+
+<script>
+/* ======================================================
+   4orth BUSINESS OS — localStorage store, admin panel, member portal
+   Demo prototype. Change ADMIN below before deploying.
+   ====================================================== */
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
+  var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
+  var NGN=function(n){return "₦"+Math.round(+n||0).toLocaleString("en-NG");};
+  var shortN=function(n){n=+n||0;return n>=1e6?("₦"+(n/1e6).toFixed(1)+"M"):NGN(n);};
+  var fmt=function(d){try{return new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short"});}catch(e){return d;}};
+  var DAY=86400000, NOW=Date.now();
+  var iso=function(off){return new Date(NOW+(off||0)*DAY).toISOString().slice(0,10);};
+  var todayISO=iso(0);
+  var rid=function(p){return p+Math.floor(100000+Math.random()*899999);};
+
+  var ADMIN={user:"admin", pass:"4orth"};   // change before deploying
+  var CLIENT_PIN="0000";
+  var POINT_VALUE=10;                        // ₦ cash value per point
+  var TIER_THRESH={Resident:0, Signature:5000, Executive:20000};
+  var TIER_ORDER=["Resident","Signature","Executive"];
+
+  /* ---------------- seed + store ---------------- */
+  function seed(){
+    return {
+      meta:{currency:"NGN", seededAt:NOW, foundingBase:24, foundingTarget:40},
+      staff:[
+        {id:"S1",name:"Amina Yusuf",role:"Club Manager",dept:"Executive",reportsTo:"",email:"amina@4orthspace.com"},
+        {id:"S2",name:"Tunde Bello",role:"Front of House",dept:"Spaces",reportsTo:"S1",email:"tunde@4orthspace.com"},
+        {id:"S3",name:"Chidinma Okoro",role:"Membership & Community",dept:"Members",reportsTo:"S1",email:"chidinma@4orthspace.com"},
+        {id:"S4",name:"Emeka Nwankwo",role:"Facilities",dept:"Operations",reportsTo:"S1",email:"emeka@4orthspace.com"},
+        {id:"S5",name:"Fatima Sani",role:"Finance",dept:"Accounting",reportsTo:"S1",email:"fatima@4orthspace.com"}
+      ],
+      clients:[
+        {id:"4M-0001",name:"Amara Okonkwo",email:"amara@okonkwo.co",phone:"+234 803 000 1122",tier:"Signature",points:12400,repId:"S3",since:"2026-02",pin:"0000",space:"Dedicated desk DD-02",family:{partner:" Chidi",children:"—",birthday:"14 Mar"},prefs:"Quiet corner desk, oat flat white"},
+        {id:"4M-0002",name:"David Achebe",email:"david.a@gmail.com",phone:"+234 701 555 2210",tier:"Resident",points:3200,repId:"S3",since:"2026-05",pin:"0000",space:"Hot desk pool",family:{partner:"—",children:"2",birthday:"2 Aug"},prefs:"Hot desk near the windows"},
+        {id:"4M-0003",name:"Nkechi Bello",email:"hello@formandfield.co",phone:"+234 805 221 0043",tier:"Signature",points:8600,repId:"S3",since:"2026-03",pin:"0000",space:"Creative studio ST-1",family:{partner:"—",children:"—",birthday:"9 Nov"},prefs:"Studio light, afternoons"},
+        {id:"4M-0004",name:"Lumen Fintech",email:"ops@lumen.ng",phone:"+234 809 400 7788",tier:"Executive",points:24000,repId:"S1",since:"2026-01",pin:"0000",space:"Private office PO-1",family:{partner:"—",children:"—",birthday:"—"},prefs:"Boardroom standing booking, Tue AM"},
+        {id:"4M-0005",name:"Kemi Adeyemi",email:"kemi@studiok.ng",phone:"+234 802 118 9001",tier:"Resident",points:1500,repId:"S3",since:"2026-09",pin:"0000",space:"Hot desk pool",family:{partner:"—",children:"1",birthday:"21 Jun"},prefs:"Day passes, mornings"},
+        {id:"4M-0006",name:"Zaina Group",email:"pa@zaina.group",phone:"+234 806 770 3321",tier:"Executive",points:30200,repId:"S1",since:"2025-12",pin:"0000",space:"Private office PO-2",family:{partner:"—",children:"—",birthday:"—"},prefs:"Monthly boardroom, catering"}
+      ],
+      spaces:[
+        {id:"HD-01",item:"Hot desk HD-01",type:"Hot desk",status:"Occupied",price:8000,unit:"day"},
+        {id:"HD-02",item:"Hot desk HD-02",type:"Hot desk",status:"Occupied",price:8000,unit:"day"},
+        {id:"HD-03",item:"Hot desk HD-03",type:"Hot desk",status:"Available",price:8000,unit:"day"},
+        {id:"HD-04",item:"Hot desk HD-04",type:"Hot desk",status:"Available",price:8000,unit:"day"},
+        {id:"HD-05",item:"Hot desk HD-05",type:"Hot desk",status:"Reserved",price:8000,unit:"day"},
+        {id:"HD-06",item:"Hot desk HD-06",type:"Hot desk",status:"Available",price:8000,unit:"day"},
+        {id:"DD-01",item:"Dedicated desk DD-01",type:"Dedicated desk",status:"Occupied",price:85000,unit:"month"},
+        {id:"DD-02",item:"Dedicated desk DD-02",type:"Dedicated desk",status:"Occupied",price:85000,unit:"month"},
+        {id:"DD-03",item:"Dedicated desk DD-03",type:"Dedicated desk",status:"Available",price:85000,unit:"month"},
+        {id:"DD-04",item:"Dedicated desk DD-04",type:"Dedicated desk",status:"Reserved",price:85000,unit:"month"},
+        {id:"PO-1",item:"Private office PO-1",type:"Private office",status:"Occupied",price:250000,unit:"month"},
+        {id:"PO-2",item:"Private office PO-2",type:"Private office",status:"Occupied",price:250000,unit:"month"},
+        {id:"PO-3",item:"Private office PO-3",type:"Private office",status:"Available",price:250000,unit:"month"},
+        {id:"MR-1",item:"Meeting room MR-1",type:"Meeting room",status:"Available",price:15000,unit:"hour"},
+        {id:"MR-2",item:"Meeting room MR-2",type:"Meeting room",status:"Reserved",price:15000,unit:"hour"},
+        {id:"BR-1",item:"Boardroom",type:"Boardroom",status:"Occupied",price:120000,unit:"day"},
+        {id:"ST-1",item:"Creative studio ST-1",type:"Studio",status:"Occupied",price:180000,unit:"month"}
+      ],
+      bookings:[
+        {ref:"4S-482910",type:"work",space:"Private office · Monthly",member:"Amara Okonkwo",email:"amara@okonkwo.co",date:iso(5),value:"₦250,000",status:"Confirmed",at:NOW-2*DAY},
+        {ref:"4S-471223",type:"room",space:"Boardroom · Full day",member:"Lumen Fintech",email:"ops@lumen.ng",date:iso(2),value:"₦120,000",status:"Confirmed",at:NOW-1*DAY},
+        {ref:"4S-465002",type:"work",space:"Hot desk · Day pass",member:"David Achebe",email:"david.a@gmail.com",date:iso(0),value:"₦8,000",status:"Completed",at:NOW-3*DAY},
+        {ref:"4S-459871",type:"work",space:"Creative studio · Monthly",member:"Nkechi Bello",email:"hello@formandfield.co",date:iso(4),value:"₦180,000",status:"Requested",at:NOW-4*DAY},
+        {ref:"4S-448190",type:"room",space:"Meeting room · 4 hours",member:"Zaina Group",email:"pa@zaina.group",date:iso(1),value:"₦52,000",status:"Confirmed",at:NOW-5*DAY},
+        {ref:"4S-441007",type:"tour",space:"Private tour",member:"Kemi Adeyemi",email:"kemi@studiok.ng",date:iso(3),value:"Free",status:"Requested",at:NOW-6*DAY}
+      ],
+      enquiries:[
+        {id:"ENQ-204881",name:"Ifeoma Nwosu",email:"ifeoma@design.ng",topic:"Membership",message:"Interested in Signature for our three-person design team. Space from December, and can we split billing?",received:fmt(NOW-2*DAY),status:"New",at:NOW-2*DAY},
+        {id:"ENQ-204790",name:"Bricks & Co",email:"events@bricks.co",topic:"Meeting / event hire",message:"Looking to host a 40-person product launch in December. Is the event floor free midweek evenings?",received:fmt(NOW-3*DAY),status:"Replied",at:NOW-3*DAY}
+      ],
+      applications:[
+        {id:"F40-028",memberId:"4F-0026",seat:26,name:"Chioma Okeke",email:"chioma@okekestudio.com",phone:"+234 803 000 1122",work:"Brand designer",days:"3–4 days",start:"As soon as you open",why:"Running a small studio solo and need somewhere calmer than home.",received:fmt(NOW-2*DAY),status:"New",at:NOW-2*DAY},
+        {id:"F40-027",memberId:"4F-0025",seat:25,name:"Emeka Dafe",email:"emeka@dafe.dev",phone:"+234 701 555 8890",work:"Software engineer",days:"Most days",start:"Within two weeks",why:"Remote for a London fintech, tired of cafés.",received:fmt(NOW-3*DAY),status:"Reviewed",at:NOW-3*DAY},
+        {id:"F40-026",memberId:"4F-0024",seat:24,name:"Hauwa Bello",email:"hauwa.b@gmail.com",phone:"+234 805 221 0043",work:"Writer & researcher",days:"1–2 days",start:"Within a month",why:"Writing a book, want focused days away from the house.",received:fmt(NOW-4*DAY),status:"New",at:NOW-4*DAY}
+      ],
+      tasks:[
+        {id:"T1",title:"Confirm fibre + backup power install date",owner:"S4",due:iso(-2),priority:"High",status:"In progress"},
+        {id:"T2",title:"Call Signature applicants from last week",owner:"S3",due:iso(-1),priority:"High",status:"To do"},
+        {id:"T3",title:"Restock the pantry for the week",owner:"S2",due:iso(0),priority:"Medium",status:"To do"},
+        {id:"T4",title:"Draft November member newsletter",owner:"S3",due:iso(4),priority:"Medium",status:"To do"},
+        {id:"T5",title:"Reconcile October café takings",owner:"S5",due:iso(-3),priority:"Medium",status:"Done"}
+      ],
+      loyaltyTx:[
+        {id:"LX1",clientId:"4M-0001",type:"earn",points:1200,note:"Signature membership — November",at:NOW-6*DAY},
+        {id:"LX2",clientId:"4M-0001",type:"spend",points:-500,note:"Guest day pass",at:NOW-3*DAY},
+        {id:"LX3",clientId:"4M-0004",type:"earn",points:3500,note:"Executive office — November",at:NOW-7*DAY},
+        {id:"LX4",clientId:"4M-0003",type:"earn",points:900,note:"Studio hire",at:NOW-5*DAY}
+      ],
+      invoices:[
+        {id:"INV-2041",clientId:"4M-0001",date:iso(-16),amount:85000,status:"Paid",desc:"Signature membership — November"},
+        {id:"INV-2042",clientId:"4M-0004",date:iso(-16),amount:250000,status:"Paid",desc:"Executive office — November"},
+        {id:"INV-2043",clientId:"4M-0003",date:iso(-16),amount:85000,status:"Paid",desc:"Signature membership — November"},
+        {id:"INV-2051",clientId:"4M-0002",date:iso(-6),amount:45000,status:"Due",desc:"Resident membership — November"},
+        {id:"INV-2052",clientId:"4M-0006",date:iso(-16),amount:250000,status:"Paid",desc:"Executive office — November"}
+      ],
+      events:[
+        {id:"EV-1",title:"Founders' breakfast",date:iso(11),rsvp:["4M-0001","4M-0004"]},
+        {id:"EV-2",title:"Design & coffee: a studio evening",date:iso(18),rsvp:["4M-0003"]},
+        {id:"EV-3",title:"Year-end member mixer",date:iso(32),rsvp:[]}
+      ],
+      documents:[
+        {id:"DOC-1",clientId:"4M-0001",name:"Membership agreement.pdf",kind:"Agreement"},
+        {id:"DOC-2",clientId:"4M-0001",name:"Invoice INV-2041.pdf",kind:"Invoice"},
+        {id:"DOC-3",clientId:"4M-0004",name:"Membership agreement.pdf",kind:"Agreement"},
+        {id:"DOC-4",clientId:"4M-0003",name:"Studio house rules.pdf",kind:"Policy"}
+      ],
+      rewards:[
+        {id:"R1",name:"Free day pass",cost:800},
+        {id:"R2",name:"Boardroom hour",cost:1500},
+        {id:"R3",name:"Barista drinks voucher (₦5,000)",cost:500},
+        {id:"R4",name:"Guest pass",cost:1000},
+        {id:"R5",name:"Member event +1",cost:600}
+      ],
+      outbox:[
+        {id:"EM-1",to:"members@4orthspace.com",subject:"Founders' breakfast — RSVP now",body:"You're invited to the first Founders' breakfast at 4orth.",at:NOW-1*DAY}
+      ]
+    };
+  }
+
+  var KEY="fourthOS_v1", DB=null;
+  function load(){ try{var r=localStorage.getItem(KEY);DB=r?JSON.parse(r):seed();}catch(e){DB=seed();} if(!DB||!DB.meta)DB=seed(); }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} }
+  load();
+
+  /* ---------------- helpers ---------------- */
+  function download(name, text){ try{var b=new Blob([text],{type:"text/csv;charset=utf-8"});var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},500);}catch(e){} }
+  function toCSV(rows){ if(!rows||!rows.length)return ""; var keys=Object.keys(rows[0]); var cell=function(v){v=(v==null)?"":String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}; return keys.join(",")+"\n"+rows.map(function(r){return keys.map(function(k){return cell(r[k]);}).join(",");}).join("\n"); }
+  function mail(to,subject,body){ DB.outbox.unshift({id:rid("EM-"),to:to,subject:subject,body:body,at:Date.now()}); save(); }
+  function staffName(id){var s=DB.staff.filter(function(x){return x.id===id;})[0];return s?s.name:"—";}
+  function pill(s){ var m={Confirmed:"confirmed",Completed:"confirmed",Paid:"confirmed",Active:"confirmed",Done:"confirmed",Reviewed:"confirmed",Replied:"confirmed",Available:"confirmed",Requested:"new",New:"new","To do":"new",Occupied:"new",Pending:"pending","In progress":"pending",Due:"pending",Reserved:"pending",Cancelled:"",Rejected:""}; return '<span class="d-status '+(m[s]||"")+'"><i></i>'+esc(s)+'</span>'; }
+  function tbl(headers, rows){ return '<div class="d-tblwrap"><table><thead><tr>'+headers.map(function(h){return '<th>'+h+'</th>';}).join("")+'</tr></thead><tbody>'+(rows.join("")||'<tr><td colspan="'+headers.length+'"><div class="d-empty" style="margin:8px 0">Nothing here yet.</div></td></tr>')+'</tbody></table></div>'; }
+  function overdue(t){ return t.status!=="Done" && t.due<todayISO; }
+  function money(v){ v=String(v).replace(/[^0-9.]/g,""); return +v||0; }
+  function occupancy(){ var tot=DB.spaces.length, occ=DB.spaces.filter(function(s){return s.status==="Occupied";}).length; return tot?Math.round(occ/tot*100):0; }
+  function foundingClaimed(){ return (DB.meta.foundingBase||0)+DB.applications.length; }
+
+  /* ---------------- public API (site forms write here) ---------------- */
+  window.OS={
+    addBooking:function(b){ var r={ref:b.ref||rid("4S-"),type:b.type||"work",space:b.space||"",member:b.name||b.member||"Guest",email:b.email||"",date:b.date||"",value:b.value||"",status:"Requested",at:Date.now()}; DB.bookings.unshift(r); mail("frontdesk@4orthspace.com","New booking "+r.ref,r.member+" requested "+r.space); save(); if(adminAuthed)refreshAdmin(); return r; },
+    addEnquiry:function(en){ var r={id:rid("ENQ-"),name:en.name,email:en.email,topic:en.topic,message:en.message,received:fmt(Date.now()),status:"New",at:Date.now()}; DB.enquiries.unshift(r); save(); if(adminAuthed)refreshAdmin(); return r; },
+    addApplication:function(ap){ var r={id:rid("F40-"),memberId:ap.memberId||("4F-"+("000"+(ap.seat||0)).slice(-4)),seat:ap.seat,name:ap.name,email:ap.email,phone:ap.phone,work:ap.work,days:ap.days,start:ap.start,why:ap.why,picsPolicy:ap.picsPolicy===true,received:fmt(Date.now()),status:"New",at:Date.now()}; DB.applications.unshift(r); save(); if(adminAuthed)refreshAdmin(); return r; },
+    reset:function(){ DB=seed(); save(); }
+  };
+
+  /* ================= ADMIN ================= */
+  var adminAuthed=false, adminTab="overview";
+  var fBookings="all", fEnq="all", fTasks="all", fSpaces="all", membersSub="members";
+  var dash=$("#dash"), dGate=$("#dashGate"), dApp=$("#dashApp");
+  var TITLES={overview:"Executive overview",spaces:"Spaces",bookings:"Bookings",enquiries:"Enquiries",members:"Members & loyalty",tasks:"Tasks"};
+
+  function openAdmin(){ closePortal(); dash.classList.add("open"); document.body.style.overflow="hidden"; (adminAuthed?$("#dashOut"):$("#dashUser")).focus(); }
+  function closeAdmin(){ dash.classList.remove("open"); if(!$("#portal").classList.contains("open")) document.body.style.overflow=""; }
+
+  function adminAuth(){
+    if($("#dashUser").value.trim()===ADMIN.user && $("#dashPass").value===ADMIN.pass){
+      adminAuthed=true; dGate.hidden=true; dApp.hidden=false; $("#dashLiveTag").hidden=false; $("#dashReset").hidden=false;
+      $("#dashDate").textContent="Guzape, Abuja · "+new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+      renderAdmin(); $("#dashOut").focus();
+    } else { dGate.classList.add("bad"); $("#dashErr").style.display="block"; $("#dashPass").select(); }
+  }
+  function signOutAdmin(){ adminAuthed=false; dApp.hidden=true; dGate.hidden=false; $("#dashLiveTag").hidden=true; $("#dashReset").hidden=true; $("#dashUser").value=""; $("#dashPass").value=""; }
+
+  function refreshAdmin(){ if(adminAuthed){ renderCounts(); renderAdmin(); } }
+  function renderCounts(){
+    $("#bkCount").textContent="("+DB.bookings.length+")";
+    var ne=DB.enquiries.filter(function(x){return x.status==="New";}).length; $("#enqCount").textContent=ne?("("+ne+")"):"";
+    var ot=DB.tasks.filter(overdue).length; $("#taskCount").textContent=ot?("("+ot+")"):"";
+  }
+
+  function renderAdmin(){
+    renderCounts();
+    ({overview:aOverview,spaces:aSpaces,bookings:aBookings,enquiries:aEnquiries,members:aMembers,tasks:aTasks}[adminTab])();
+  }
+
+  function aOverview(){
+    var revMonth=DB.invoices.filter(function(i){return i.status==="Paid";}).reduce(function(a,b){return a+b.amount;},0);
+    var openEnq=DB.enquiries.filter(function(x){return x.status==="New";}).length;
+    var openBk=DB.bookings.filter(function(x){return x.status==="Requested"||x.status==="Confirmed";}).length;
+    var ptsLiab=DB.clients.reduce(function(a,b){return a+b.points;},0)*POINT_VALUE;
+    var od=DB.tasks.filter(overdue);
+    var seatsLeft=(DB.meta.foundingTarget||40)-foundingClaimed();
+    var kpis=[
+      ["<span>"+occupancy()+"%</span>","Occupancy","of "+DB.spaces.length+" spaces"],
+      [DB.clients.length,"Active members","CRM profiles"],
+      [shortN(revMonth).replace("₦","<span>₦")+"</span>","Revenue booked","paid invoices"],
+      [openBk,"Open bookings","requested + confirmed"],
+      [openEnq,"Open enquiries",openEnq?"awaiting reply":"inbox clear"],
+      ["<span>"+shortN(ptsLiab)+"</span>","Points liability",DB.clients.reduce(function(a,b){return a+b.points;},0).toLocaleString()+" pts"]
+    ];
+    var html='<div class="d-kpis">'+kpis.map(function(k){return '<div class="d-kpi"><b>'+k[0]+'</b><div class="lab">'+k[1]+'</div><em>'+k[2]+'</em></div>';}).join("")+'</div>';
+    // alerts
+    if(od.length){
+      html+='<div class="os-alert red"><div><b>'+od.length+' overdue task'+(od.length>1?"s":"")+'</b> — '+esc(od.map(function(t){return staffName(t.owner);}).filter(function(v,i,a){return a.indexOf(v)===i;}).join(", "))+'</div><button class="os-btn" data-remindall="1">Remind all</button></div>';
+    }
+    if(seatsLeft>0){ html+='<div class="os-alert amber"><div><b>Founding 40:</b> '+foundingClaimed()+' of '+(DB.meta.foundingTarget||40)+' charter seats claimed, '+seatsLeft+' open</div><button class="os-btn" data-gotab="members">Review applicants</button></div>'; }
+    // panels
+    var done=DB.tasks.filter(function(t){return t.status==="Done";}).length;
+    var byTier=TIER_ORDER.map(function(t){return {t:t,n:DB.clients.filter(function(c){return c.tier===t;}).length};});
+    var maxTier=Math.max.apply(null,byTier.map(function(x){return x.n;}))||1;
+    html+='<div class="d-split"><div class="d-panel"><h3>Membership by tier</h3><div class="ph">Active members</div><div class="d-bars">'+
+      byTier.map(function(x){return '<div class="d-bar-row"><span>'+x.t+'</span><span class="d-track"><span class="d-fill" style="width:'+(x.n/maxTier*100)+'%"></span></span><span class="val">'+x.n+'</span></div>';}).join("")+
+      '</div></div><div class="d-panel"><h3>Recent loyalty activity</h3><div class="ph">Points earned and spent</div><ul class="d-feed">'+
+      DB.loyaltyTx.slice(0,6).map(function(x){var c=DB.clients.filter(function(cl){return cl.id===x.clientId;})[0];return '<li><time>'+(x.points>0?"+":"")+x.points+'</time><span>'+esc(c?c.name:x.clientId)+' — '+esc(x.note)+'</span></li>';}).join("")+
+      '</ul></div></div>';
+    // task completion + outbox
+    html+='<div class="d-split"><div class="d-panel"><h3>Team task completion</h3><div class="ph">'+done+' of '+DB.tasks.length+' done</div><div class="d-track" style="height:10px"><span class="d-fill" style="width:'+(DB.tasks.length?done/DB.tasks.length*100:0)+'%"></span></div><div style="margin-top:16px" class="d-feed">'+
+      DB.bookings.slice(0,4).map(function(b){return '<li><time>'+esc(fmt(b.at))+'</time><span>'+esc(b.member)+' — '+esc(b.space)+' '+pill(b.status)+'</span></li>';}).join("")+'</div></div>'+
+      '<div class="d-panel"><h3>Email outbox</h3><div class="ph">'+DB.outbox.length+' sent · demo</div><ul class="d-feed">'+
+      DB.outbox.slice(0,6).map(function(m){return '<li><time>'+esc(fmt(m.at))+'</time><span>'+esc(m.subject)+' <span style="color:var(--muted)">→ '+esc(m.to)+'</span></span></li>';}).join("")+'</ul></div></div>';
+    $("#dv-overview").innerHTML=html;
+  }
+
+  function aSpaces(){
+    var types=["all"].concat(DB.spaces.map(function(s){return s.type;}).filter(function(v,i,a){return a.indexOf(v)===i;}));
+    var list=fSpaces==="all"?DB.spaces:DB.spaces.filter(function(s){return s.type===fSpaces;});
+    var rows=list.map(function(s){return '<tr><td class="d-ref">'+esc(s.id)+'</td><td>'+esc(s.item)+'</td><td style="color:var(--muted)">'+esc(s.type)+'</td><td>'+NGN(s.price)+' <span style="color:var(--muted);font-family:var(--f-mono);font-size:.7rem">/'+esc(s.unit)+'</span></td><td>'+pill(s.status)+'</td></tr>';});
+    var floor='<div class="floor-grid">'+DB.spaces.map(function(s){return '<button class="floor-cell fc-'+s.status.toLowerCase()+'" data-floor="'+esc(s.id)+'"><div class="fc-id">'+esc(s.id)+'</div><div class="fc-t">'+esc(s.type)+'</div><div class="fc-s fc-'+s.status.toLowerCase()+'"><i></i>'+esc(s.status)+'</div></button>';}).join("")+'</div>';
+    $("#dv-spaces").innerHTML=
+      '<div class="d-panel"><h3>Floor status</h3><div class="ph">Guzape · one floor · tap a space to cycle Available → Reserved → Occupied</div>'+floor+'</div>'+
+      '<div class="os-actions"><span class="lab" style="font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Filter:</span>'+
+      types.map(function(t){return '<button class="d-chip'+(fSpaces===t?" on":"")+'" data-fsp="'+esc(t)+'">'+(t==="all"?"All":esc(t))+'</button>';}).join("")+
+      '<button class="os-btn" data-csv="spaces" style="margin-left:auto">Export CSV</button></div>'+
+      '<div class="d-panel" style="padding:24px 24px 12px">'+tbl(["ID","Space","Type","Price","Status"],rows)+'</div>';
+  }
+
+  function aBookings(){
+    var opts=[["all","All"],["work","Workspace"],["room","Meeting room"],["tour","Tour"]];
+    var list=fBookings==="all"?DB.bookings:DB.bookings.filter(function(b){return b.type===fBookings;});
+    var rows=list.map(function(b){
+      var next={Requested:"Confirmed",Confirmed:"Completed",Completed:"Completed",Cancelled:"Cancelled"}[b.status]||"Confirmed";
+      return '<tr><td class="d-ref">'+esc(b.ref)+'</td><td><div>'+esc(b.member)+'</div><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--muted)">'+esc(b.email)+'</div></td><td>'+esc(b.space)+'</td><td style="color:var(--muted);white-space:nowrap">'+esc(b.date||"—")+'</td><td>'+esc(b.value)+'</td><td>'+pill(b.status)+'</td><td>'+(b.status!=="Completed"&&b.status!=="Cancelled"?'<button class="os-btn" data-badv="'+esc(b.ref)+'" data-next="'+next+'">→ '+next+'</button>':'<span style="color:var(--muted)">—</span>')+'</td></tr>';
+    });
+    $("#dv-bookings").innerHTML=
+      '<div class="os-actions">'+opts.map(function(o){return '<button class="d-chip'+(fBookings===o[0]?" on":"")+'" data-fbk="'+o[0]+'">'+o[1]+'</button>';}).join("")+'<button class="os-btn" data-csv="bookings" style="margin-left:auto">Export CSV</button></div>'+
+      '<div class="d-panel" style="padding:24px 24px 12px">'+tbl(["Ref","Member","Space","Date","Value","Status","Advance"],rows)+'</div>';
+  }
+
+  function aEnquiries(){
+    var opts=[["all","All"],["New","New"],["Replied","Replied"]];
+    var list=fEnq==="all"?DB.enquiries:DB.enquiries.filter(function(e){return e.status===fEnq;});
+    var cards=list.map(function(a){return '<div class="d-enq"><header><div><h4>'+esc(a.name)+'</h4><div class="meta">'+esc(a.email)+' · '+esc(a.id)+' · '+esc(a.received)+'</div></div>'+pill(a.status)+'</header><div class="tags"><span class="tag">'+esc(a.topic)+'</span></div><p class="msg">'+esc(a.message)+'</p><div class="acts"><button data-enq="'+esc(a.id)+'">'+(a.status==="New"?"Mark replied":"Reopen")+'</button><a href="mailto:'+esc(a.email)+'?subject=4orth%20Space%20—%20your%20enquiry">Reply by email</a></div></div>';}).join("");
+    $("#dv-enquiries").innerHTML='<div class="os-actions">'+opts.map(function(o){return '<button class="d-chip'+(fEnq===o[0]?" on":"")+'" data-fen="'+o[0]+'">'+o[1]+'</button>';}).join("")+'<button class="os-btn" data-csv="enquiries" style="margin-left:auto">Export CSV</button></div>'+(cards||'<div class="d-empty">No enquiries in this view.</div>');
+  }
+
+  function aMembers(){
+    var sub='<div class="os-actions"><button class="d-chip'+(membersSub==="members"?" on":"")+'" data-sub="members">Members (CRM)</button><button class="d-chip'+(membersSub==="founding"?" on":"")+'" data-sub="founding">Founding 40 <span style="color:var(--brass)">'+DB.applications.length+'</span></button>'+(membersSub==="members"?'<button class="os-btn" data-csv="clients" style="margin-left:auto">Export CSV</button>':'')+'</div>';
+    if(membersSub==="members"){
+      var rows=DB.clients.map(function(c){return '<tr><td class="d-ref">'+esc(c.id)+'</td><td><div>'+esc(c.name)+'</div><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--muted)">'+esc(c.email)+'</div></td><td>'+pill(c.tier)+'</td><td>'+c.points.toLocaleString()+' <span style="color:var(--muted);font-family:var(--f-mono);font-size:.7rem">('+NGN(c.points*POINT_VALUE)+')</span></td><td style="color:var(--muted)">'+esc(staffName(c.repId))+'</td><td><button class="os-btn" data-redeem="'+esc(c.id)+'">Pay with points</button></td></tr>';});
+      $("#dv-members").innerHTML=sub+'<div class="d-panel" style="padding:24px 24px 12px">'+tbl(["ID","Member","Tier","Points","Relationship mgr","Loyalty"],rows)+'</div>';
+    } else {
+      var target=DB.meta.foundingTarget||40, filled=foundingClaimed();
+      var cards=DB.applications.map(function(a){return '<div class="d-appcard"><header><div><h4>'+esc(a.name)+' <span style="font-family:var(--f-mono);font-size:.8rem;color:var(--brass)">· '+esc(a.memberId||("seat #"+(a.seat||"—")))+'</span></h4><div class="meta">'+esc(a.email)+' · '+esc(a.phone||"—")+' · seat #'+esc(a.seat||"—")+' · '+esc(a.received)+(a.picsPolicy?' · <span style="color:var(--d-ok)">photo policy ✓</span>':'')+'</div></div>'+pill(a.status)+'</header><div class="tags"><span class="tag">'+esc(a.work)+'</span><span class="tag">'+esc(a.days)+'</span><span class="tag">'+esc(a.start)+'</span></div><p class="msg">'+esc(a.why)+'</p><div class="acts"><button data-app="'+esc(a.id)+'">'+(a.status==="New"?"Mark reviewed":"Reopen")+'</button><a href="mailto:'+esc(a.email)+'?subject=4orth%20Founding%2040">Reply by email</a></div></div>';}).join("");
+      $("#dv-members").innerHTML=sub+'<div class="d-appbar"><div><div class="lab">Charter seats filled</div><div class="big"><span>'+filled+'</span> / '+target+'</div></div><div class="track"><i style="width:'+(filled/target*100)+'%"></i></div><div><div class="lab">Open</div><div class="big">'+Math.max(target-filled,0)+'</div></div></div>'+(cards||'<div class="d-empty">No applications yet.</div>');
+    }
+  }
+
+  function aTasks(){
+    var opts=[["all","All"],["overdue","Overdue"],["To do","To do"],["In progress","In progress"],["Done","Done"]];
+    var list=DB.tasks.filter(function(t){return fTasks==="all"?true:fTasks==="overdue"?overdue(t):t.status===fTasks;});
+    var rows=list.map(function(t){
+      var nxt={ "To do":"In progress","In progress":"Done","Done":"To do"}[t.status];
+      return '<tr><td>'+esc(t.title)+(overdue(t)?' <span style="color:#e0a06b;font-family:var(--f-mono);font-size:.64rem">OVERDUE</span>':'')+'</td><td style="color:var(--muted)">'+esc(staffName(t.owner))+'</td><td style="color:var(--muted);white-space:nowrap">'+esc(t.due)+'</td><td>'+esc(t.priority)+'</td><td>'+pill(t.status)+'</td><td style="white-space:nowrap"><button class="os-btn" data-tadv="'+t.id+'" data-next="'+nxt+'">→ '+nxt+'</button> <button class="os-btn" data-trem="'+t.id+'">Remind</button></td></tr>';
+    });
+    var addf='<form class="os-form" id="taskAdd"><div class="full" style="font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Assign a task</div><div><label>Title</label><input id="tkTitle" required></div><div><label>Owner</label><select id="tkOwner">'+DB.staff.map(function(s){return '<option value="'+s.id+'">'+esc(s.name)+'</option>';}).join("")+'</select></div><div><label>Due date</label><input type="date" id="tkDue" value="'+todayISO+'"></div><div><label>Priority</label><select id="tkPri"><option>High</option><option selected>Medium</option><option>Low</option></select></div><div class="full"><button class="os-btn brass" type="submit">Add task</button></div></form>';
+    $("#dv-tasks").innerHTML='<div class="os-actions">'+opts.map(function(o){return '<button class="d-chip'+(fTasks===o[0]?" on":"")+'" data-ftk="'+esc(o[0])+'">'+o[1]+'</button>';}).join("")+'<button class="os-btn" data-csv="tasks" style="margin-left:auto">Export CSV</button></div><div class="d-panel" style="padding:24px 24px 12px">'+tbl(["Task","Owner","Due","Priority","Status","Actions"],rows)+'</div><div class="d-panel">'+addf+'</div>';
+  }
+
+  /* admin events */
+  $("#dashGo").addEventListener("click",adminAuth);
+  $("#dashPass").addEventListener("keydown",function(e){if(e.key==="Enter")adminAuth();});
+  $("#dashUser").addEventListener("keydown",function(e){if(e.key==="Enter")$("#dashPass").focus();});
+  [$("#dashUser"),$("#dashPass")].forEach(function(i){i.addEventListener("input",function(){dGate.classList.remove("bad");$("#dashErr").style.display="none";});});
+  $("#dashClose").addEventListener("click",closeAdmin);
+  $("#dashOut").addEventListener("click",signOutAdmin);
+  $("#dashReset").addEventListener("click",function(){ if(confirm("Reset all demo data to the seeded sample set?")){ DB=seed(); save(); refreshAdmin(); } });
+  $("#dashTabs").addEventListener("click",function(e){ var t=e.target.closest(".dash-tab"); if(!t)return; adminTab=t.dataset.tab; $$(".dash-tab",this).forEach(function(x){x.classList.remove("on");}); t.classList.add("on"); ["overview","spaces","bookings","enquiries","members","tasks"].forEach(function(k){$("#dv-"+k).hidden=(k!==adminTab);}); $("#dashDeptTitle").textContent=TITLES[adminTab]; renderAdmin(); });
+
+  $("#dashApp").addEventListener("click",function(e){
+    var el=e.target.closest("[data-fbk],[data-fen],[data-ftk],[data-fsp],[data-sub],[data-csv],[data-badv],[data-tadv],[data-trem],[data-enq],[data-app],[data-redeem],[data-floor],[data-gotab],[data-remindall]");
+    if(!el)return;
+    if(el.dataset.fbk!=null){fBookings=el.dataset.fbk;aBookings();return;}
+    if(el.dataset.fen!=null){fEnq=el.dataset.fen;aEnquiries();return;}
+    if(el.dataset.ftk!=null){fTasks=el.dataset.ftk;aTasks();return;}
+    if(el.dataset.fsp!=null){fSpaces=el.dataset.fsp;aSpaces();return;}
+    if(el.dataset.sub!=null){membersSub=el.dataset.sub;aMembers();return;}
+    if(el.dataset.gotab!=null){ $('.dash-tab[data-tab="'+el.dataset.gotab+'"]').click(); return; }
+    if(el.dataset.csv){ var map={spaces:DB.spaces,bookings:DB.bookings,enquiries:DB.enquiries,tasks:DB.tasks,clients:DB.clients}; download("4orth-"+el.dataset.csv+".csv",toCSV(map[el.dataset.csv])); return; }
+    if(el.dataset.badv){ var b=DB.bookings.filter(function(x){return x.ref===el.dataset.badv;})[0]; if(b){b.status=el.dataset.next;save();aBookings();renderCounts();} return; }
+    if(el.dataset.tadv){ var t=DB.tasks.filter(function(x){return x.id===el.dataset.tadv;})[0]; if(t){t.status=el.dataset.next;save();aTasks();renderCounts();} return; }
+    if(el.dataset.trem){ var t2=DB.tasks.filter(function(x){return x.id===el.dataset.trem;})[0]; if(t2){mail(staffName(t2.owner),"Reminder: "+t2.title,"This task is due "+t2.due+".");el.textContent="Reminded ✓";el.disabled=true;} return; }
+    if(el.dataset.remindall){ DB.tasks.filter(overdue).forEach(function(t3){mail(staffName(t3.owner),"Overdue: "+t3.title,"This task is overdue.");}); el.textContent="Reminders sent ✓"; el.disabled=true; return; }
+    if(el.dataset.enq){ var en=DB.enquiries.filter(function(x){return x.id===el.dataset.enq;})[0]; if(en){en.status=en.status==="New"?"Replied":"New";save();aEnquiries();renderCounts();} return; }
+    if(el.dataset.app){ var ap=DB.applications.filter(function(x){return x.id===el.dataset.app;})[0]; if(ap){ap.status=ap.status==="New"?"Reviewed":"New";save();aMembers();} return; }
+    if(el.dataset.redeem){ var c=DB.clients.filter(function(x){return x.id===el.dataset.redeem;})[0]; if(c){ var p=parseInt(prompt("Points to deduct from "+c.name+" (balance "+c.points+"):","500"),10); if(p>0&&p<=c.points){ c.points-=p; DB.loyaltyTx.unshift({id:rid("LX"),clientId:c.id,type:"spend",points:-p,note:"Paid with points",at:Date.now()}); mail(c.email,"Points redeemed","You redeemed "+p+" points at 4orth."); save(); aMembers(); } } return; }
+    if(el.dataset.floor){ var s=DB.spaces.filter(function(x){return x.id===el.dataset.floor;})[0]; if(s){var order=["Available","Reserved","Occupied"];s.status=order[(order.indexOf(s.status)+1)%3];save();aSpaces();} return; }
+  });
+  $("#dashApp").addEventListener("submit",function(e){
+    if(e.target.id==="taskAdd"){ e.preventDefault(); var title=$("#tkTitle").value.trim(); if(!title)return; DB.tasks.unshift({id:rid("T"),title:title,owner:$("#tkOwner").value,due:$("#tkDue").value||todayISO,priority:$("#tkPri").value,status:"To do"}); save(); aTasks(); renderCounts(); }
+  });
+
+  /* ================= MEMBER PORTAL ================= */
+  var curMember=null, portalTab="overview";
+  var portal=$("#portal"), pGate=$("#portalGate"), pApp=$("#portalApp");
+  function openPortal(){ closeAdmin(); portal.classList.add("open"); document.body.style.overflow="hidden"; (curMember?$("#portalOut"):$("#portalId")).focus(); }
+  function closePortal(){ portal.classList.remove("open"); if(!dash.classList.contains("open")) document.body.style.overflow=""; }
+  function portalAuth(){
+    var q=$("#portalId").value.trim().toLowerCase(); var pin=$("#portalPin").value;
+    var m=DB.clients.filter(function(c){return c.name.toLowerCase()===q||c.id.toLowerCase()===q;})[0];
+    if(m && pin===CLIENT_PIN){ curMember=m; pGate.hidden=true; pApp.hidden=false; portalTab="overview"; $$(".dash-tab",$("#portalTabs")).forEach(function(x,i){x.classList.toggle("on",i===0);}); ["overview","workspace","bookings","invoices","rewards","events","documents","profile"].forEach(function(k,i){$("#pv-"+k).hidden=i!==0;}); renderPortal(); }
+    else { pGate.classList.add("bad"); $("#portalErr").style.display="block"; }
+  }
+  function signOutPortal(){ curMember=null; pApp.hidden=true; pGate.hidden=false; $("#portalId").value=""; $("#portalPin").value=""; }
+
+  function tierProgress(m){
+    var i=TIER_ORDER.indexOf(m.tier); var nextTier=TIER_ORDER[i+1];
+    if(!nextTier) return {next:null,pct:100,need:0};
+    var need=TIER_THRESH[nextTier]; var pct=Math.min(m.points/need*100,100);
+    return {next:nextTier,pct:pct,need:Math.max(need-m.points,0)};
+  }
+  function renderPortalHeader(){
+    var m=curMember, tp=tierProgress(m), rep=DB.staff.filter(function(s){return s.id===m.repId;})[0];
+    $("#portalHeader").innerHTML='<div class="p-head"><div><div class="tier">'+esc(m.tier)+' member · '+esc(m.id)+'</div><h3>Welcome back, '+esc(m.name.split(" ")[0])+'</h3><div style="font-family:var(--f-mono);font-size:.72rem;color:var(--muted)">Relationship manager: '+esc(rep?rep.name:"—")+' <button class="os-btn" data-msgrep="1" style="margin-left:8px">Message</button></div></div><div class="p-pts"><div class="big">'+m.points.toLocaleString()+'</div><div class="sub">points · '+NGN(m.points*POINT_VALUE)+'</div><div class="p-prog"><i style="width:'+tp.pct+'%"></i></div><div class="sub" style="margin-top:6px">'+(tp.next?(tp.need.toLocaleString()+" pts to "+tp.next):"Top tier")+'</div></div></div>';
+  }
+  function renderPortal(){
+    renderPortalHeader();
+    ({overview:pOverview,workspace:pWorkspace,bookings:pBookings,invoices:pInvoices,rewards:pRewards,events:pEvents,documents:pDocuments,profile:pProfile}[portalTab])();
+  }
+  function myBookings(){ return DB.bookings.filter(function(b){return b.member===curMember.name||b.email===curMember.email;}); }
+  function myInvoices(){ return DB.invoices.filter(function(i){return i.clientId===curMember.id;}); }
+  function myTx(){ return DB.loyaltyTx.filter(function(x){return x.clientId===curMember.id;}); }
+  function myDocs(){ return DB.documents.filter(function(d){return d.clientId===curMember.id;}); }
+
+  function pOverview(){
+    var nextBk=myBookings().filter(function(b){return b.date>=todayISO&&b.status!=="Cancelled";}).sort(function(a,b){return a.date<b.date?-1:1;})[0];
+    var ev=DB.events.filter(function(e){return e.date>=todayISO;})[0];
+    var due=myInvoices().filter(function(i){return i.status==="Due";});
+    $("#pv-overview").innerHTML='<div class="d-split"><div class="d-panel"><h3>Coming up</h3><ul class="d-feed">'+
+      '<li><time>Booking</time><span>'+(nextBk?esc(nextBk.space)+' · '+esc(nextBk.date)+' '+pill(nextBk.status):"No upcoming bookings")+'</span></li>'+
+      '<li><time>Event</time><span>'+(ev?esc(ev.title)+' · '+esc(fmt(ev.date)):"No upcoming events")+'</span></li>'+
+      '<li><time>Billing</time><span>'+(due.length?due.length+" invoice(s) due — "+NGN(due.reduce(function(a,b){return a+b.amount;},0)):"All invoices settled")+'</span></li>'+
+      '<li><time>Access</time><span>Access hours confirmed at opening — we\'re in pre-opening</span></li>'+
+      '</ul></div><div class="d-panel"><h3>Your space</h3><div class="ph">Current allocation</div><div style="font-family:var(--f-disp);font-size:1.5rem;color:var(--brass)">'+esc(curMember.space)+'</div><p style="color:var(--muted);font-weight:300;margin-top:10px;font-size:.9rem">'+esc(curMember.prefs)+'</p><div class="os-actions" style="margin-top:16px"><button class="os-btn brass" data-ptabgo="bookings">Book a space</button><button class="os-btn" data-facil="1">Facilities request</button></div></div></div>';
+  }
+  function pWorkspace(){
+    $("#pv-workspace").innerHTML='<div class="d-panel"><h3>My workspace</h3><div class="d-mgrid" style="margin-top:14px"><div class="d-mcard"><div class="tier">Membership</div><div class="cnt"><span>'+esc(curMember.tier)+'</span></div><div class="meta"><span>since '+esc(curMember.since)+'</span></div></div><div class="d-mcard"><div class="tier">Allocation</div><div style="font-family:var(--f-disp);font-size:1.3rem;margin-top:10px;color:var(--brass)">'+esc(curMember.space)+'</div></div><div class="d-mcard"><div class="tier">Access</div><div style="font-family:var(--f-disp);font-size:1.15rem;margin-top:10px">Hours set at opening</div><div class="meta"><span>pre-opening</span></div></div></div><p style="color:var(--muted);font-weight:300;margin-top:18px;font-size:.9rem">Preferences on file: '+esc(curMember.prefs)+'</p></div>';
+  }
+  function pBookings(){
+    var rows=myBookings().map(function(b){return '<tr><td class="d-ref">'+esc(b.ref)+'</td><td>'+esc(b.space)+'</td><td style="color:var(--muted)">'+esc(b.date||"—")+'</td><td>'+esc(b.value)+'</td><td>'+pill(b.status)+'</td></tr>';});
+    var form='<form class="os-form" id="pBook"><div class="full" style="font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Book a space</div><div><label>What</label><select id="pbType"><option value="work|Hot desk · Day pass|₦8,000">Hot desk — day pass</option><option value="work|Dedicated desk · Day|₦12,000">Dedicated desk — day</option><option value="room|Meeting room · 2 hours|₦28,000">Meeting room — 2 hours</option><option value="room|Boardroom · Half day|₦70,000">Boardroom — half day</option><option value="tour|Private tour|Free">Private tour</option></select></div><div><label>Date</label><input type="date" id="pbDate" value="'+todayISO+'"></div><div class="full"><button class="os-btn brass" type="submit">Request booking</button></div></form>';
+    $("#pv-bookings").innerHTML='<div class="d-panel" style="padding:24px 24px 12px">'+tbl(["Ref","Space","Date","Value","Status"],rows)+'</div><div class="d-panel">'+form+'</div>';
+  }
+  function pInvoices(){
+    var rows=myInvoices().map(function(i){return '<tr><td class="d-ref">'+esc(i.id)+'</td><td>'+esc(i.desc)+'</td><td style="color:var(--muted)">'+esc(i.date)+'</td><td>'+NGN(i.amount)+'</td><td>'+pill(i.status)+'</td><td><button class="os-btn" data-receipt="'+esc(i.id)+'">Receipt</button></td></tr>';});
+    $("#pv-invoices").innerHTML='<div class="d-panel" style="padding:24px 24px 12px">'+tbl(["Invoice","Description","Date","Amount","Status","Receipt"],rows)+'</div>';
+  }
+  function pRewards(){
+    var tx=myTx().map(function(x){return '<li><time>'+(x.points>0?"+":"")+x.points+'</time><span>'+esc(x.note)+' <span style="color:var(--muted)">· '+esc(fmt(x.at))+'</span></span></li>';}).join("");
+    var cat=DB.rewards.map(function(r){var ok=curMember.points>=r.cost;return '<div class="rwd-card"><h4>'+esc(r.name)+'</h4><div class="cost">'+r.cost.toLocaleString()+' pts</div><button class="os-btn'+(ok?" brass":"")+'" data-claim="'+r.id+'"'+(ok?"":" disabled")+'>'+(ok?"Redeem":"Not enough")+'</button></div>';}).join("");
+    $("#pv-rewards").innerHTML='<div class="d-split"><div class="d-panel"><h3>Points history</h3><ul class="d-feed">'+(tx||'<li><span style="color:var(--muted)">No activity yet.</span></li>')+'</ul></div><div class="d-panel"><h3>Your 4orth card</h3><div class="ph">Spendable at the club and partners</div><div style="border:1px solid var(--brass);border-radius:14px;padding:22px;background:linear-gradient(135deg,rgba(201,164,92,.14),transparent)"><div style="font-family:var(--f-mono);letter-spacing:.2em;color:var(--brass)">4ORTH · '+esc(curMember.id)+'</div><div style="font-family:var(--f-disp);font-size:1.4rem;margin-top:18px">'+esc(curMember.name)+'</div><div style="font-family:var(--f-mono);font-size:.72rem;color:var(--muted);margin-top:4px">'+esc(curMember.tier)+' · '+curMember.points.toLocaleString()+' pts · '+NGN(curMember.points*POINT_VALUE)+'</div></div></div></div><div class="d-panel"><h3>Spend your points</h3><div class="rwd" style="margin-top:14px">'+cat+'</div></div>';
+  }
+  function pEvents(){
+    var rows=DB.events.map(function(e){var going=e.rsvp.indexOf(curMember.id)>=0;return '<div class="d-enq"><header><div><h4>'+esc(e.title)+'</h4><div class="meta">'+esc(fmt(e.date))+' · '+e.rsvp.length+' attending</div></div>'+(going?pill("Confirmed"):"")+'</header><div class="acts"><button class="os-btn'+(going?"":" brass")+'" data-rsvp="'+e.id+'">'+(going?"Cancel RSVP":"RSVP")+'</button></div></div>';}).join("");
+    $("#pv-events").innerHTML=rows||'<div class="d-empty">No member events scheduled.</div>';
+  }
+  function pDocuments(){
+    var rows=myDocs().map(function(d){return '<tr><td>'+esc(d.name)+'</td><td style="color:var(--muted)">'+esc(d.kind)+'</td><td><button class="os-btn" data-doc="'+esc(d.id)+'">Download</button></td></tr>';});
+    $("#pv-documents").innerHTML='<div class="d-panel" style="padding:24px 24px 12px">'+tbl(["Document","Type","Action"],rows)+'</div>';
+  }
+  function pProfile(){
+    var m=curMember;
+    $("#pv-profile").innerHTML='<div class="d-panel"><h3>Profile</h3><form class="os-form" id="pProf"><div><label>Name</label><input id="prName" value="'+esc(m.name)+'"></div><div><label>Email</label><input id="prEmail" value="'+esc(m.email)+'"></div><div><label>Phone</label><input id="prPhone" value="'+esc(m.phone)+'"></div><div><label>Birthday</label><input id="prBday" value="'+esc(m.family.birthday)+'"></div><div class="full"><label>Preferences (saved for the team)</label><textarea id="prPrefs" rows="2">'+esc(m.prefs)+'</textarea></div><div class="full"><button class="os-btn brass" type="submit">Save profile</button> <span id="prSaved" style="color:var(--brass);font-family:var(--f-mono);font-size:.72rem;display:none">Saved ✓</span></div></form></div>';
+  }
+
+  /* portal events */
+  $("#portalGo").addEventListener("click",portalAuth);
+  $("#portalPin").addEventListener("keydown",function(e){if(e.key==="Enter")portalAuth();});
+  $("#portalId").addEventListener("keydown",function(e){if(e.key==="Enter")$("#portalPin").focus();});
+  [$("#portalId"),$("#portalPin")].forEach(function(i){i.addEventListener("input",function(){pGate.classList.remove("bad");$("#portalErr").style.display="none";});});
+  $("#portalClose").addEventListener("click",closePortal);
+  $("#portalOut").addEventListener("click",signOutPortal);
+  $("#portalTabs").addEventListener("click",function(e){var t=e.target.closest(".dash-tab");if(!t)return;portalTab=t.dataset.ptab;$$(".dash-tab",this).forEach(function(x){x.classList.remove("on");});t.classList.add("on");["overview","workspace","bookings","invoices","rewards","events","documents","profile"].forEach(function(k){$("#pv-"+k).hidden=(k!==portalTab);});renderPortal();});
+  $("#portalApp").addEventListener("click",function(e){
+    var el=e.target.closest("[data-ptabgo],[data-facil],[data-msgrep],[data-claim],[data-rsvp],[data-receipt],[data-doc]");
+    if(!el)return;
+    if(el.dataset.ptabgo){ $('.dash-tab[data-ptab="'+el.dataset.ptabgo+'"]').click(); return; }
+    if(el.dataset.facil){ var what=prompt("What do you need? (facilities request)","Spare monitor at my desk"); if(what){ DB.tasks.unshift({id:rid("T"),title:"Member request — "+curMember.name+": "+what,owner:"S4",due:todayISO,priority:"Medium",status:"To do"}); mail("facilities@4orthspace.com","Facilities request from "+curMember.name,what); save(); if(adminAuthed)refreshAdmin(); alert("Request logged. Facilities will follow up."); } return; }
+    if(el.dataset.msgrep){ var msg=prompt("Message to your relationship manager:"); if(msg){ mail(staffName(curMember.repId),"Message from "+curMember.name,msg); alert("Message sent to your relationship manager."); } return; }
+    if(el.dataset.claim){ var r=DB.rewards.filter(function(x){return x.id===el.dataset.claim;})[0]; if(r&&curMember.points>=r.cost){ curMember.points-=r.cost; DB.loyaltyTx.unshift({id:rid("LX"),clientId:curMember.id,type:"spend",points:-r.cost,note:"Redeemed: "+r.name,at:Date.now()}); mail(curMember.email,"Reward redeemed",r.name); save(); if(adminAuthed)refreshAdmin(); renderPortal(); } return; }
+    if(el.dataset.rsvp){ var ev=DB.events.filter(function(x){return x.id===el.dataset.rsvp;})[0]; if(ev){var k=ev.rsvp.indexOf(curMember.id); if(k>=0)ev.rsvp.splice(k,1); else ev.rsvp.push(curMember.id); save(); pEvents();} return; }
+    if(el.dataset.receipt){ var inv=DB.invoices.filter(function(x){return x.id===el.dataset.receipt;})[0]; if(inv){ download("4orth-"+inv.id+".txt","4orth Space — Receipt\n"+inv.id+"\n"+inv.desc+"\nDate: "+inv.date+"\nAmount: "+NGN(inv.amount)+"\nStatus: "+inv.status+"\nMember: "+curMember.name); } return; }
+    if(el.dataset.doc){ var d=DB.documents.filter(function(x){return x.id===el.dataset.doc;})[0]; if(d){ download(d.name.replace(/\s+/g,"_")+".txt","4orth Space — "+d.name+"\nType: "+d.kind+"\nMember: "+curMember.name+"\n(Demo document.)"); } return; }
+  });
+  $("#portalApp").addEventListener("submit",function(e){
+    e.preventDefault();
+    if(e.target.id==="pBook"){ var v=$("#pbType").value.split("|"); var r=window.OS.addBooking({type:v[0],space:v[1],value:v[2],name:curMember.name,email:curMember.email,date:$("#pbDate").value}); pBookings(); alert("Booking "+r.ref+" requested. Front desk will confirm."); }
+    if(e.target.id==="pProf"){ curMember.name=$("#prName").value.trim()||curMember.name; curMember.email=$("#prEmail").value.trim(); curMember.phone=$("#prPhone").value.trim(); curMember.family.birthday=$("#prBday").value.trim(); curMember.prefs=$("#prPrefs").value.trim(); save(); $("#prSaved").style.display="inline"; renderPortalHeader(); }
+  });
+
+  /* ---------------- open triggers ---------------- */
+  $$("[data-dash-open]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();openAdmin();});});
+  $$("[data-portal-open]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();openPortal();});});
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ if(dash.classList.contains("open"))closeAdmin(); if(portal.classList.contains("open"))closePortal(); } });
+})();
+</script>
+<script>
+/* Branded fallback: if a remote photo is blocked (in-chat preview) or 404s,
+   swap in an inline SVG placeholder so nothing shows a broken-image icon. */
+(function(){
+  "use strict";
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function ph(label){
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">'
+      +'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F1810"/><stop offset="1" stop-color="#2A2117"/></linearGradient></defs>'
+      +'<rect width="800" height="600" fill="url(#g)"/>'
+      +'<rect x="1" y="1" width="798" height="598" fill="none" stroke="#2A2117"/>'
+      +'<text x="400" y="278" fill="#C9A45C" font-family="Georgia, serif" font-size="54" text-anchor="middle"><tspan font-weight="500">4</tspan>orth</text>'
+      +'<text x="400" y="330" fill="#EDE6D8" font-family="monospace" font-size="20" letter-spacing="3" text-anchor="middle" opacity="0.6">'+esc(label).toUpperCase()+'</text>'
+      +'</svg>';
+    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+  }
+  function wire(img){
+    if(img.__fbwired) return; img.__fbwired=1;
+    function fb(){ if(img.__fb) return; img.__fb=1; img.src=ph(img.getAttribute("alt")||"4orth Space"); }
+    img.addEventListener("error",fb);
+    if(img.complete && img.naturalWidth===0 && img.getAttribute("src")) fb();
+  }
+  function scan(){ var l=document.querySelectorAll("img"); for(var i=0;i<l.length;i++) wire(l[i]); }
+  scan();
+  setTimeout(scan,400);
+  window.addEventListener("load",scan);
+  // final safety net: any image still with no dimensions (blocked or stalled) gets the placeholder
+  setTimeout(function(){
+    document.querySelectorAll("img").forEach(function(img){
+      if(!img.__fb && img.getAttribute("src") && img.naturalWidth===0 && img.src.indexOf("data:")!==0){ img.__fb=1; img.src=ph(img.getAttribute("alt")||"4orth Space"); }
+    });
+  },4000);
+})();
+</script>
+</body>
+</html>
