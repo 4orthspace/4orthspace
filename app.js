@@ -260,8 +260,9 @@
     if(!fConsent.checked){ fConsentErr.style.display="block"; ok=false; } else { fConsentErr.style.display="none"; }
     if(!fPics.checked){ fPicsErr.style.display="block"; ok=false; } else { fPicsErr.style.display="none"; }
     if(!ok){ fndForm.querySelector(".field.invalid")&&fndForm.querySelector(".field.invalid").scrollIntoView({block:"center",behavior:"smooth"}); return; }
-    if(fndClaimed<fndTarget) fndClaimed++;
-    var seat=fndClaimed;
+    var claimedNow=(window.OS&&window.OS.foundingCount)?window.OS.foundingCount():fndClaimed;
+    var seat=Math.min(claimedNow+1, fndTarget);
+    fndClaimed=seat;
     var memberId="4F-"+("000"+seat).slice(-4);
     document.getElementById("fndCount").textContent=fndClaimed;
     document.getElementById("fndBar").style.width=(fndClaimed/fndTarget*100)+"%";
@@ -366,7 +367,7 @@
   var todayISO=iso(0);
   var rid=function(p){return p+Math.floor(100000+Math.random()*899999);};
 
-  var ADMIN={user:"admin", pass:"4orth"};   // change before deploying
+  var ADMIN={user:"Ameera", pass:"bestspace"};   // change before deploying
   var CLIENT_PIN="0000";
   var POINT_VALUE=10;                        // ₦ cash value per point
   var TIER_THRESH={Resident:0, Signature:5000, Executive:20000};
@@ -547,7 +548,7 @@
      2. Deploy > New deployment > Web app > Execute as: Me, Who has access: Anyone. Copy the /exec URL.
      3. Paste it into SHEET.url below. Leave blank to run on local demo data (localStorage).
      When set: every new record is POSTed to the sheet, and the admin can pull live data from it. */
-  var SHEET={ url:"https://script.google.com/macros/s/AKfycbz4zzE3yajwsZovLOL_CmT8PA5Rvx69twwCwOcdupBWrFagqPEiF2JEc3BI0gaz6-GMGw/exec" };
+  var SHEET={ url:"https://script.google.com/macros/s/AKfycbyvedIzGs_FlVe8S_3PyLv72dYSWWsi1E9fdYR-rfvkpOc0W7s4hsUa-E0WVXcAKI8_gw/exec" };
   function postSheet(kind,data){
     if(!SHEET.url) return;
     try{ fetch(SHEET.url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({kind:kind,data:data})}); }catch(e){}
@@ -587,6 +588,7 @@
     addClass:function(c){ var r={id:rid("KB-"),session:c.session||"",title:c.title||"Kickboxing",day:c.day||"",time:c.time||"",date:c.date||"",name:c.name||"",email:c.email||"",phone:c.phone||"",status:"Booked",received:fmt(Date.now()),at:Date.now()}; DB.classes.unshift(r); mail("classes@4orthspace.com","Class booking "+r.id,r.name+" booked "+r.title+" "+r.day+" "+r.time); save(); postSheet("class",r); if(adminAuthed)refreshAdmin(); return r; },
     addMember:function(mm){ var mx=0; DB.clients.forEach(function(c){var g=/(\d+)$/.exec(c.id||"");if(g){mx=Math.max(mx,parseInt(g[1],10));}}); var r={id:mm.id||("4M-"+("000"+(mx+1)).slice(-4)),name:mm.name,email:mm.email||"",phone:mm.phone||"",tier:"Resident",points:0,repId:"S3",since:new Date().toISOString().slice(0,7),pin:mm.pin||CLIENT_PIN,space:"Hot desk pool",family:{partner:"—",children:"—",birthday:"—"},prefs:"New member"}; DB.clients.unshift(r); mail("members@4orthspace.com","New member "+r.id,r.name+" created an account"); save(); postSheet("member",{id:r.id,name:r.name,email:r.email,phone:r.phone,tier:r.tier,points:r.points,space:r.space,since:r.since,status:"Active",received:fmt(Date.now()),at:Date.now()}); if(adminAuthed)refreshAdmin(); return r; },
     sync:function(done){ syncFromSheet(done); },
+    foundingCount:function(){ return foundingClaimed(); },
     hasSheet:function(){ return !!SHEET.url; },
     reset:function(){ DB=startState(); save(); }
   };
@@ -683,7 +685,11 @@
     var list=fBookings==="all"?DB.bookings:DB.bookings.filter(function(b){return b.type===fBookings;});
     var rows=list.map(function(b){
       var next={Requested:"Confirmed",Confirmed:"Completed",Completed:"Completed",Cancelled:"Cancelled"}[b.status]||"Confirmed";
-      return '<tr><td class="d-ref">'+esc(b.ref)+'</td><td><div>'+esc(b.member)+'</div><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--muted)">'+esc(b.email)+'</div></td><td>'+esc(b.space)+'</td><td style="color:var(--muted);white-space:nowrap">'+esc(b.date||"—")+'</td><td>'+esc(b.value)+'</td><td>'+pill(b.status)+'</td><td>'+(b.status!=="Completed"&&b.status!=="Cancelled"?'<button class="os-btn" data-badv="'+esc(b.ref)+'" data-next="'+next+'">→ '+next+'</button>':'<span style="color:var(--muted)">—</span>')+'</td></tr>';
+      var actions;
+      if(b.status==="Requested"){ actions='<button class="os-btn brass" data-bkapprove="'+esc(b.ref)+'">Approve</button> <button class="os-btn" data-bkreject="'+esc(b.ref)+'">Reject</button>'; }
+      else if(b.status!=="Completed"&&b.status!=="Cancelled"){ actions='<button class="os-btn" data-badv="'+esc(b.ref)+'" data-next="'+next+'">→ '+next+'</button>'; }
+      else { actions='<span style="color:var(--muted)">—</span>'; }
+      return '<tr><td class="d-ref">'+esc(b.ref)+'</td><td><div>'+esc(b.member)+'</div><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--muted)">'+esc(b.email)+'</div></td><td>'+esc(b.space)+'</td><td style="color:var(--muted);white-space:nowrap">'+esc(b.date||"—")+'</td><td>'+esc(b.value)+'</td><td>'+pill(b.status)+'</td><td style="white-space:nowrap">'+actions+'</td></tr>';
     });
     var clsRows=DB.classes.map(function(c){return '<tr><td class="d-ref">'+esc(c.id)+'</td><td><div>'+esc(c.name)+'</div><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--muted)">'+esc(c.email)+' · '+esc(c.phone||"—")+'</div></td><td>'+esc(c.title)+' · '+esc(c.day)+' '+esc(c.time)+'</td><td style="color:var(--muted);white-space:nowrap">'+esc(c.date||"—")+'</td><td>'+pill(c.status)+'</td></tr>';});
     return (
@@ -722,7 +728,7 @@
         daysOrder.map(function(d){return '<div class="d-bar-row"><span>'+d+'</span><span class="d-track"><span class="d-fill" style="width:'+((byDays[d]||0)/maxD*100)+'%"></span></span><span class="val">'+(byDays[d]||0)+'</span></div>';}).join("")+'</div></div>'+
         '<div class="d-panel"><h3>When they want to start</h3><div class="ph">Start-timing preference</div><div class="d-bars">'+
         startOrder.map(function(d){return '<div class="d-bar-row"><span>'+d+'</span><span class="d-track"><span class="d-fill" style="width:'+((byStart[d]||0)/maxS*100)+'%"></span></span><span class="val">'+(byStart[d]||0)+'</span></div>';}).join("")+'</div></div></div>';
-      var cards=apps.map(function(a){return '<div class="d-appcard"><header><div><h4>'+esc(a.name)+' <span style="font-family:var(--f-mono);font-size:.8rem;color:var(--brass)">· '+esc(a.memberId||("seat #"+(a.seat||"—")))+'</span></h4><div class="meta">'+esc(a.email)+' · '+esc(a.phone||"—")+' · seat #'+esc(a.seat||"—")+' · '+esc(a.received)+(a.picsPolicy?' · <span style="color:var(--d-ok)">photo policy ✓</span>':'')+'</div></div>'+pill(a.status)+'</header><div class="tags"><span class="tag">'+esc(a.work)+'</span><span class="tag">'+esc(a.days)+'</span><span class="tag">'+esc(a.start)+'</span>'+(a.visitDate?'<span class="tag" style="color:var(--brass)">visit '+esc(a.visitDate)+' '+esc(a.visitTime||"")+'</span>':'')+'</div><p class="msg">'+esc(a.why)+'</p><div class="acts"><button data-app="'+esc(a.id)+'">'+(a.status==="New"?"Mark reviewed":"Reopen")+'</button><a href="mailto:'+esc(a.email)+'?subject=4orth%20Founding%2040">Reply by email</a></div></div>';}).join("");
+      var cards=apps.map(function(a){return '<div class="d-appcard"><header><div><h4>'+esc(a.name)+' <span style="font-family:var(--f-mono);font-size:.8rem;color:var(--brass)">· '+esc(a.memberId||("seat #"+(a.seat||"—")))+'</span></h4><div class="meta">'+esc(a.email)+' · '+esc(a.phone||"—")+' · seat #'+esc(a.seat||"—")+' · '+esc(a.received)+(a.picsPolicy?' · <span style="color:var(--d-ok)">photo policy ✓</span>':'')+'</div></div>'+pill(a.status)+'</header><div class="tags"><span class="tag">'+esc(a.work)+'</span><span class="tag">'+esc(a.days)+'</span><span class="tag">'+esc(a.start)+'</span>'+(a.visitDate?'<span class="tag" style="color:var(--brass)">visit '+esc(a.visitDate)+' '+esc(a.visitTime||"")+'</span>':'')+'</div><p class="msg">'+esc(a.why)+'</p><div class="acts"><button class="os-btn brass" data-appapprove="'+esc(a.id)+'">Approve visit</button><button class="os-btn" data-appreject="'+esc(a.id)+'">Reject</button><a href="mailto:'+esc(a.email)+'?subject=4orth%20Founding%2040">Reply by email</a></div></div>';}).join("");
       $("#dv-members").innerHTML=sub+kpiHtml+'<div class="d-appbar"><div><div class="lab">Charter seats filled</div><div class="big"><span>'+filled+'</span> / '+target+'</div></div><div class="track"><i style="width:'+(filled/target*100)+'%"></i></div><div><div class="lab">Open</div><div class="big">'+Math.max(target-filled,0)+'</div></div></div><div class="os-actions"><button class="os-btn" data-csv="applications">Export applicants CSV</button></div>'+bars+(cards||'<div class="d-empty">No applications yet.</div>');
     }
   }
@@ -966,7 +972,7 @@
     var kpis=[[apps.length,"Applications","total received"],["<span>"+filled+"</span> / "+target,"Charter seats",Math.max(target-filled,0)+" open"],[nNew,"Awaiting review",nRev+" reviewed"],[withVisit,"Visits booked","first-visit times"]];
     var kpiHtml='<div class="d-kpis">'+kpis.map(function(k){return '<div class="d-kpi"><b>'+k[0]+'</b><div class="lab">'+k[1]+'</div><em>'+k[2]+'</em></div>';}).join("")+'</div>';
     var bars='<div class="d-split"><div class="d-panel"><h3>Preferred days a week</h3><div class="ph">How often applicants plan to come</div><div class="d-bars">'+daysOrder.map(function(d){return '<div class="d-bar-row"><span>'+d+'</span><span class="d-track"><span class="d-fill" style="width:'+((byDays[d]||0)/maxD*100)+'%"></span></span><span class="val">'+(byDays[d]||0)+'</span></div>';}).join("")+'</div></div><div class="d-panel"><h3>When they want to start</h3><div class="ph">Start-timing preference</div><div class="d-bars">'+startOrder.map(function(d){return '<div class="d-bar-row"><span>'+d+'</span><span class="d-track"><span class="d-fill" style="width:'+((byStart[d]||0)/maxS*100)+'%"></span></span><span class="val">'+(byStart[d]||0)+'</span></div>';}).join("")+'</div></div></div>';
-    var cards=apps.map(function(a){return '<div class="d-appcard"><header><div><h4>'+esc(a.name)+' <span style="font-family:var(--f-mono);font-size:.8rem;color:var(--brass)">· '+esc(a.memberId||("seat #"+(a.seat||"—")))+'</span></h4><div class="meta">'+esc(a.email)+' · '+esc(a.phone||"—")+' · seat #'+esc(a.seat||"—")+' · '+esc(a.received)+(a.picsPolicy?' · <span style="color:var(--d-ok)">photo policy ✓</span>':'')+'</div></div>'+pill(a.status)+'</header><div class="tags"><span class="tag">'+esc(a.work)+'</span><span class="tag">'+esc(a.days)+'</span><span class="tag">'+esc(a.start)+'</span>'+(a.visitDate?'<span class="tag" style="color:var(--brass)">visit '+esc(a.visitDate)+' '+esc(a.visitTime||"")+'</span>':'')+'</div><p class="msg">'+esc(a.why)+'</p><div class="acts"><button data-app="'+esc(a.id)+'">'+(a.status==="New"?"Mark reviewed":"Reopen")+'</button><a href="mailto:'+esc(a.email)+'?subject=4orth%20Founding%2040">Reply by email</a></div></div>';}).join("");
+    var cards=apps.map(function(a){return '<div class="d-appcard"><header><div><h4>'+esc(a.name)+' <span style="font-family:var(--f-mono);font-size:.8rem;color:var(--brass)">· '+esc(a.memberId||("seat #"+(a.seat||"—")))+'</span></h4><div class="meta">'+esc(a.email)+' · '+esc(a.phone||"—")+' · seat #'+esc(a.seat||"—")+' · '+esc(a.received)+(a.picsPolicy?' · <span style="color:var(--d-ok)">photo policy ✓</span>':'')+'</div></div>'+pill(a.status)+'</header><div class="tags"><span class="tag">'+esc(a.work)+'</span><span class="tag">'+esc(a.days)+'</span><span class="tag">'+esc(a.start)+'</span>'+(a.visitDate?'<span class="tag" style="color:var(--brass)">visit '+esc(a.visitDate)+' '+esc(a.visitTime||"")+'</span>':'')+'</div><p class="msg">'+esc(a.why)+'</p><div class="acts"><button class="os-btn brass" data-appapprove="'+esc(a.id)+'">Approve visit</button><button class="os-btn" data-appreject="'+esc(a.id)+'">Reject</button><a href="mailto:'+esc(a.email)+'?subject=4orth%20Founding%2040">Reply by email</a></div></div>';}).join("");
     return kpiHtml+'<div class="d-appbar"><div><div class="lab">Charter seats filled</div><div class="big"><span>'+filled+'</span> / '+target+'</div></div><div class="track"><i style="width:'+(filled/target*100)+'%"></i></div><div><div class="lab">Open</div><div class="big">'+Math.max(target-filled,0)+'</div></div></div><div class="os-actions"><button class="os-btn" data-csv="applications">Export applicants CSV</button></div>'+bars+(cards||'<div class="d-empty">No applications yet.</div>');
   }
   function nextBirthday(bstr){
@@ -1022,8 +1028,10 @@
     var now=new Date(); if(!opsCalYM)opsCalYM={y:now.getFullYear(),m:now.getMonth()};
     var y=opsCalYM.y,mo=opsCalYM.m, first=new Date(y,mo,1), start=first.getDay(), days=new Date(y,mo+1,0).getDate();
     var monthName=first.toLocaleDateString("en-GB",{month:"long",year:"numeric"}), todayStr=new Date().toISOString().slice(0,10);
-    var typeColor={Meeting:"var(--brass)",Leave:"#d39a9a",Delivery:"#8fbfa8"};
+    var typeColor={Meeting:"var(--brass)",Leave:"#d39a9a",Delivery:"#8fbfa8",Booking:"#9ec5e8",Visit:"#e8cf94"};
     var byDate={}; DB.calendar.forEach(function(ev){ (byDate[ev.date]=byDate[ev.date]||[]).push(ev); });
+    DB.bookings.forEach(function(b){ if(b.date){ (byDate[b.date]=byDate[b.date]||[]).push({title:(b.member||"Guest")+" · "+(b.space||"booking")+(b.status==="Requested"?" (request)":""),type:"Booking"}); } });
+    DB.applications.forEach(function(a){ if(a.visitDate){ (byDate[a.visitDate]=byDate[a.visitDate]||[]).push({title:"Visit · "+a.name,type:"Visit"}); } });
     var cells="";
     for(var i=0;i<start;i++)cells+='<div class="cal-cell empty"></div>';
     for(var d=1;d<=days;d++){
@@ -1034,7 +1042,7 @@
     var dow=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(function(x){return '<div class="cal-dow">'+x+'</div>';}).join("");
     var form='<div class="d-panel"><h3>Add to calendar</h3><form class="os-form" id="calEventAdd"><div class="full"><label>What</label><input id="ceTitle" required></div><div><label>Date</label><input type="date" id="ceDate" value="'+todayISO+'"></div><div><label>Type</label><select id="ceType"><option>Meeting</option><option>Leave</option><option>Delivery</option></select></div><div class="full"><label>Who</label><input id="ceWho" placeholder="Person or team"></div><div class="full"><button class="os-btn brass" type="submit">Add</button></div></form></div>';
     var upcoming=DB.calendar.filter(function(e){return e.date>=todayStr;}).sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,8).map(function(e){return '<li><time>'+esc(fmt(e.date))+'</time><span>'+esc(e.title)+' <span style="color:var(--muted)">· '+esc(e.type)+(e.who?" · "+esc(e.who):"")+'</span> <button class="chk-open" data-caldel="'+e.id+'">Remove</button></span></li>';}).join("");
-    return '<div class="d-panel"><div class="cal-head"><button class="os-btn" id="opsCalPrev">‹</button><h3 style="margin:0">'+monthName+'</h3><button class="os-btn" id="opsCalNext">›</button></div><div style="font-family:var(--f-mono);font-size:.64rem;color:var(--muted);margin-bottom:10px">Meeting <span style="color:var(--brass)">●</span> · Leave <span style="color:#d39a9a">●</span> · Delivery <span style="color:#8fbfa8">●</span></div><div class="cal-grid">'+dow+cells+'</div></div><div class="d-split">'+form+'<div class="d-panel"><h3>Upcoming</h3><ul class="d-feed">'+(upcoming||'<li><span style="color:var(--muted)">Nothing scheduled.</span></li>')+'</ul></div></div>';
+    return '<div class="d-panel"><div class="cal-head"><button class="os-btn" id="opsCalPrev">‹</button><h3 style="margin:0">'+monthName+'</h3><button class="os-btn" id="opsCalNext">›</button></div><div style="font-family:var(--f-mono);font-size:.64rem;color:var(--muted);margin-bottom:10px">Meeting <span style="color:var(--brass)">●</span> · Leave <span style="color:#d39a9a">●</span> · Delivery <span style="color:#8fbfa8">●</span> · Booking <span style="color:#9ec5e8">●</span> · Visit <span style="color:#e8cf94">●</span></div><div class="cal-grid">'+dow+cells+'</div></div><div class="d-split">'+form+'<div class="d-panel"><h3>Upcoming</h3><ul class="d-feed">'+(upcoming||'<li><span style="color:var(--muted)">Nothing scheduled.</span></li>')+'</ul></div></div>';
   }
   /* ================= MARKETING ================= */
   function aMarketing(){
@@ -1123,6 +1131,16 @@
     if(e.target.id==="expAdd"){ e.preventDefault(); var amt=parseInt($("#exAmt").value,10)||0; if(amt>0){ DB.expenses.unshift({id:rid("EX-"),category:$("#exCat").value,amount:amt,date:$("#exDate").value||todayISO,note:$("#exNote").value.trim()}); audit("Recorded "+$("#exCat").value+" expense "+NGN(amt)); save(); aAccounting(); } return; }
   });
 
+  /* booking + founding approve / reject (auto-confirmation email) */
+  $("#dashApp").addEventListener("click",function(e){
+    var el=e.target.closest("[data-bkapprove],[data-bkreject],[data-appapprove],[data-appreject]");
+    if(!el)return;
+    if(el.dataset.bkapprove){ var b=DB.bookings.filter(function(x){return x.ref===el.dataset.bkapprove;})[0]; if(b){ b.status="Confirmed"; mail(b.email||b.member,"Booking confirmed — "+b.ref,"Hi "+b.member+", your booking for "+b.space+(b.date?" on "+b.date:"")+" is confirmed. We look forward to seeing you at 4orth."); audit("Approved booking "+b.ref); save(); aOps(); renderCounts(); } return; }
+    if(el.dataset.bkreject){ var b2=DB.bookings.filter(function(x){return x.ref===el.dataset.bkreject;})[0]; if(b2){ b2.status="Cancelled"; mail(b2.email||b2.member,"Booking update — "+b2.ref,"Hi "+b2.member+", unfortunately we couldn't confirm your booking for "+b2.space+". Please reply to arrange another time."); audit("Rejected booking "+b2.ref); save(); aOps(); renderCounts(); } return; }
+    if(el.dataset.appapprove){ var a=DB.applications.filter(function(x){return x.id===el.dataset.appapprove;})[0]; if(a){ a.status="Approved"; mail(a.email,"Your 4orth visit is confirmed","Hi "+a.name+", your Founding 40 visit"+(a.visitDate?" on "+a.visitDate+" at "+(a.visitTime||""):"")+" is confirmed. Your member ID is "+a.memberId+". Welcome to the fourth space."); audit("Approved Founding 40 "+(a.memberId||a.id)); save(); aClients(); } return; }
+    if(el.dataset.appreject){ var a2=DB.applications.filter(function(x){return x.id===el.dataset.appreject;})[0]; if(a2){ a2.status="Declined"; mail(a2.email,"About your 4orth application","Hi "+a2.name+", thank you for applying to the Founding 40. We're unable to confirm a place at this time, but we'll keep your details on file."); audit("Declined Founding 40 "+(a2.memberId||a2.id)); save(); aClients(); } return; }
+  });
+
   /* admin events */
   $("#dashGo").addEventListener("click",adminAuth);
   $("#dashPass").addEventListener("keydown",function(e){if(e.key==="Enter")adminAuth();});
@@ -1131,7 +1149,7 @@
   $("#dashClose").addEventListener("click",closeAdmin);
   $("#dashOut").addEventListener("click",signOutAdmin);
   $("#dashReset").addEventListener("click",function(){ if(confirm("Reset all dashboard data to a clean, empty state? This clears members, bookings, enquiries and every record in this browser, and signs you out. (Platform has a Restore demo data option.)")){ DB=emptyState(); save(); signOutAdmin(); } });
-  $("#dashSync").addEventListener("click",function(){ var b=$("#dashSync"); b.textContent="Syncing…"; syncFromSheet(function(ok){ b.textContent=ok?"Synced ✓":"Sync failed"; renderAdmin(); setTimeout(function(){b.textContent="Sync sheet";},2500); }); });
+  $("#dashSync").addEventListener("click",function(){ var b=$("#dashSync"); b.textContent="Syncing…"; syncFromSheet(function(ok,why){ b.textContent=ok?"Synced ✓":("Sync failed"+(why?" ("+why+")":"")); if(ok)renderAdmin(); setTimeout(function(){b.textContent="Sync sheet";},4000); }); });
   $("#dashTabs").addEventListener("click",function(e){ var t=e.target.closest(".dash-tab"); if(!t)return; adminTab=t.dataset.tab; $$(".dash-tab",this).forEach(function(x){x.classList.remove("on");}); t.classList.add("on"); ["overview","clients","operations","marketing","hr","accounting","platform"].forEach(function(k){$("#dv-"+k).hidden=(k!==adminTab);}); $("#dashDeptTitle").textContent=TITLES[adminTab]; renderAdmin(); });
 
   $("#dashApp").addEventListener("click",function(e){
